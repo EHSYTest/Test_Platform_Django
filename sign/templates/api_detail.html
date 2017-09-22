@@ -1,0 +1,70 @@
+
+<document>
+<html lang="zh-hans">
+<head>
+  <meta charset="UTF-8">
+  <title>自动化测试平台</title>
+  <link rel="stylesheet" type="text/css" href="/case/admin/css/base.css"/>
+  <meta name="robots" content="NONE,NOARCHIVE"/>
+  <style id="firepath-matching-node-style" type="text/css"></style>
+</head>
+<body class=""data-admin-utc-offset="28800">
+<!-- Container -->
+  <div id="container">
+<!-- Header -->
+  <div id="header">
+    <div id="branding">
+      <h1 id="site-name">
+        <a href="/index/">自动化测试平台</a>
+      </h1>
+    </div>
+  </div>
+<!-- END Header -->
+<div class="breadcrumbs">
+<a href="/index/"><strong>首页</strong></a>
+</div>
+<!-- Content -->
+<div class="header-wrapper">
+</div>
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr>
+              <td class="text-left" width="50"><strong>ID</strong></td>
+              <td class="text-left " width="80"><strong>接口名称</strong></td>
+              <td class="text-left" width="300"><strong>接口地址</strong></td>
+              <td class="text-left" width="100"><strong>POST/GET</strong></td>
+              <td class="text-left" width="60"><strong>创建时间</strong></td>
+              <td class="text-left" width="50"><strong>状态</strong></td>
+            </tr>
+          </thead>
+            <tbody>
+                <tr>
+                  <td class="text-left" width="50">{{api.id}}</td>
+                  <td class="text-left" width="100">{{api.name}}</td>
+                  <td class="text-left" width="300">{{api.address}}</td>
+                  <td class="text-left" width="100">{{api.method}}</td>
+                  <td class="text-left" width="150">{{api.create_time}}</td>
+                  <td class="text-left" width="50">{{api.status}}</td>
+                </tr>
+          </tbody>
+        </table>
+      </div>
+</div>
+<div>
+  <form action="/run_test/"method="post" enctype="multipart/form-data" id="form-model">
+    <table>
+    {% for param in params %}
+      <tr>
+        <td class="text-left" width="100">{{param}}</td>
+        <td><input name="{{param}}" type="text"><br></td>
+      </tr>
+    {% endfor %}
+      <tr>
+        <td class="text-left" width="100" style="border-bottom:0;"></td>
+        <td style="border-bottom:0;" align="right"><button type="submit" name="run_button" value="{{api.id}}">Run</button></td>
+      </tr>
+    </table>
+</div>
+</body>
+</html>

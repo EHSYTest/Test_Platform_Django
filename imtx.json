@@ -1,0 +1,158 @@
+[
+{
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$30000$wZwElVesSzRS$D4uTQTbmoWiRKf41mls01826OD3H0iad9fVow9iX35k=",
+        "last_login": "2017-06-27T02:19:36.285Z",
+        "is_superuser": true,
+        "username": "admin",
+        "first_name": "",
+        "last_name": "",
+        "email": "rick_zhang@ehsy.com",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2017-05-05T03:23:31.378Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 2,
+    "fields": {
+        "password": "pbkdf2_sha256$30000$Q7N6X1wgBOdT$tAzJU8OVPgoKcDAuw0sQj/oDcZYxGR+egDxJgO3vxiE=",
+        "last_login": "2017-05-09T06:25:13.482Z",
+        "is_superuser": false,
+        "username": "rick_zhang",
+        "first_name": "",
+        "last_name": "",
+        "email": "",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2017-05-05T03:28:49Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "sign.event",
+    "pk": 1,
+    "fields": {
+        "name": "\u5c0f\u7c735\u53d1\u5e03\u4f1a",
+        "limit": 200,
+        "status": true,
+        "address": "\u4e0a\u6d77\u6d66\u4e1c\u65b0\u533a",
+        "start_time": "2017-05-10T04:00:00Z",
+        "create_time": "2017-05-05T06:01:47.677Z"
+    }
+},
+{
+    "model": "sign.event",
+    "pk": 2,
+    "fields": {
+        "name": "\u9b45\u65cf-\u9b45\u84dd\u53d1\u5e03\u4f1a",
+        "limit": 1000,
+        "status": true,
+        "address": "\u51cc\u9633\u5927\u53a6",
+        "start_time": "2017-05-12T10:00:00Z",
+        "create_time": "2017-05-09T02:41:25.815Z"
+    }
+},
+{
+    "model": "sign.event",
+    "pk": 3,
+    "fields": {
+        "name": "iPhone8\u53d1\u5e03\u4f1a",
+        "limit": 2000,
+        "status": true,
+        "address": "\u4e0a\u6d77\u5e02\u6d66\u4e1c\u51cc\u9633\u5927\u53a6",
+        "start_time": "2017-10-10T10:20:20Z",
+        "create_time": "2017-05-10T07:57:01.183Z"
+    }
+},
+{
+    "model": "sign.event",
+    "pk": 4,
+    "fields": {
+        "name": "iPhone8\u53d1\u5e03\u4f1a2",
+        "limit": 2000,
+        "status": true,
+        "address": "\u4e0a\u6d77\u5e02\u6d66\u4e1c\u51cc\u9633\u5927\u53a6",
+        "start_time": "2017-10-10T10:20:20Z",
+        "create_time": "2017-05-10T08:35:15.850Z"
+    }
+},
+{
+    "model": "sign.guest",
+    "pk": 1,
+    "fields": {
+        "event": 1,
+        "realname": "Rick",
+        "phone": "15150681507",
+        "email": "rick_zhang@ehsy.com",
+        "sign": true,
+        "create_time": "2017-05-05T06:26:55.032Z"
+    }
+},
+{
+    "model": "sign.guest",
+    "pk": 2,
+    "fields": {
+        "event": 1,
+        "realname": "Rick2",
+        "phone": "123432111",
+        "email": "rick_zhang@ehsy.com",
+        "sign": true,
+        "create_time": "2017-05-09T02:40:10.034Z"
+    }
+},
+{
+    "model": "sign.guest",
+    "pk": 3,
+    "fields": {
+        "event": 2,
+        "realname": "Rick3",
+        "phone": "233222221",
+        "email": "rick_zhang@ehsy.com",
+        "sign": false,
+        "create_time": "2017-05-09T02:41:31.932Z"
+    }
+},
+{
+    "model": "sign.guest",
+    "pk": 4,
+    "fields": {
+        "event": 2,
+        "realname": "Rick4",
+        "phone": "13332112233",
+        "email": "rick_zhang@ehsy.com",
+        "sign": false,
+        "create_time": "2017-05-09T02:42:04.040Z"
+    }
+},
+{
+    "model": "sign.guest",
+    "pk": 5,
+    "fields": {
+        "event": 2,
+        "realname": "Rick5",
+        "phone": "23232323",
+        "email": "rick_zhang@ehsy.com",
+        "sign": false,
+        "create_time": "2017-05-09T02:42:27.904Z"
+    }
+},
+{
+    "model": "sign.guest",
+    "pk": 6,
+    "fields": {
+        "event": 1,
+        "realname": "Rick6",
+        "phone": "1333211223322",
+        "email": "rick_zhang@ehsy.com",
+        "sign": true,
+        "create_time": "2017-05-09T02:42:50.947Z"
+    }
+}
+]

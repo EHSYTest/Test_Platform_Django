@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Django Page</title>
+</head>
+<body>
+    <hr>
+    <h1>发布会管理</h1>
+    <hr>
+
+    <!-- 表单 -->
+
+    <form method="post" action="/login_action/">
+        <input name='username' type='text' placeholder='username'><br>
+        <input name="passward" type="password" placeholder="passward"><br>
+        {{error}}<br>
+        <button id="btn" type="submit">登录</button>
+        {% csrf_token %}
+    </form>
+    <button id="btn2" type="submit">登<br>录</button>
+    <br>
+    <a href="/back_to_ehsy/">back</a>
+    <br>
+    <img src="/static/image/img.jpg" alt="图片加载失败" width="258" height="259" />
+    <h2 style="background-color:yellow;color:red;margin-left:20px;">次级标题</h2>
+    <a href="http://www-staging.ehsy.com" target="_blank"><i>西域链接</i></a>
+    <hr>
+    <table>
+        <thead>
+            <tr>
+                <td>发布会</td>
+                <td>姓名</td>
+                <td>签到状态</td>
+            </tr>
+        {% for guest in guests %}
+        <tbody>
+            <tr>
+                <td style="color:red">{{guest.event}}</td>
+                <td style="color:blue">{{guest.realname}}</td>
+                <td style="color:blue">{{guest.sign}}</td>
+        {% endfor %}
+        </tbody>
+        </thead>
+    </table>
+</body>
+</html>

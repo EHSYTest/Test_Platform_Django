@@ -1,0 +1,69 @@
+{% extends "./admin/base_site.html" %}
+{% block title %}自动化测试平台{% endblock %}
+{% block content %}
+{% block branding %}
+<h1 id="site-name">
+  <a href="/index/">自动化测试平台</a>
+</h1>
+{% endblock %}
+<div class="header-wrapper">
+</div>
+    <form action="/batch_test/"method="post" enctype="multipart/form-data" id="form-model">
+      <div style ="float:right;">
+        <button type="submit">批量测试</button>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr>
+              <td class="text-left" width="20">
+                <input type="checkbox" id="checkbox-ifs" onclick="changeBox(this)">
+              </td>
+              <td class="text-left" width="50"><strong>序号</strong></td>
+              <td class="text-left " width="80"><strong>接口名称</strong></td>
+              <td class="text-left" width="300"><strong>接口地址</strong></td>
+              <td class="text-left" width="100"><strong>POST/GET</strong></td>
+              <td class="text-left" width="60"><strong>创建时间</strong></td>
+              <td class="text-left" width="50"><strong>状态</strong></td>
+              <td class="text-left" width="100"><strong>用例文件</strong></td>
+              <td class="text-left" width="100"><strong>操作</strong></td>
+            </tr>
+          </thead>
+            <tbody>
+            {%for api in api_list%}
+                <tr>
+                  <td>
+                    <input type="checkbox" class="checkbox-ifs" value={{api.id}} name="checkbox_id">
+                  </td>
+                  <td class="text-left" width="50">{{api.id}}</td>
+                  <td class="text-left" width="100">{{api.name}}</td>
+                  <td class="text-left" width="300">{{api.address}}</td>
+                  <td class="text-left" width="100">{{api.method}}</td>
+                  <td class="text-left" width="150">{{api.create_time}}</td>
+                  <td class="text-left" width="50">{{api.status}}</td>
+                  <td class="text-left" width="100">{{api.files}}</td>
+                  <td class="text-left" width="100">
+                    <a href="/api_detail/id_{{api.id}}" target="_blank">详情</a>
+                  </td>
+                </tr>
+            {%endfor%}
+          </tbody>
+        </table>
+      </div>
+    </form>
+</div>
+<script type="text/javascript">
+  function changeBox(box){
+    var boxs = document.getElementsByClassName('checkbox-ifs');
+    if(box.checked){
+       for (i=0; i<boxs.length; i++){
+            document.getElementsByClassName('checkbox-ifs')[i].checked = true;
+       }
+    }else{
+       for (i=0; i<boxs.length; i++){
+           document.getElementsByClassName('checkbox-ifs')[i].checked = false;
+       }
+    }
+  }
+</script>
+{% endblock %}
