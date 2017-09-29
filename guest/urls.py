@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.views.static import serve
-from sign import views
+from sign import views, test_tools
 from django.conf.urls.static import static
 from django.conf import settings
 
@@ -27,5 +27,7 @@ urlpatterns = [
     url(r'^batch_test/', views.batch_test),
     url(r'^api_detail', views.api_detail),
     url(r'^run_test', views.run_test),
-
+    url(r'^upload_case', views.upload_case),
+    url(r'^test_tools', test_tools.test_tools),
+    url(r'invoice', test_tools.invoice)
 ]

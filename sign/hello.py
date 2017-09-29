@@ -1,2 +1,5 @@
+from selenium import webdriver
 
-while
+driver = webdriver.Chrome()
+driver.get('www')
+driver.implicitly_wait()

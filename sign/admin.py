@@ -62,7 +62,7 @@ class SiteForm(forms.ModelForm):
 
 
 class display_apis(admin.ModelAdmin):
-    list_display = ['id', 'name', 'address', 'method', 'params', 'create_time', 'status', 'files']
+    list_display = ['id', 'name', 'address', 'method', 'params', 'create_time', 'status']
     search_fields = ['name', 'address']    # 搜索栏
     list_filter = ['status']    # 过滤器
     actions = [api_test]

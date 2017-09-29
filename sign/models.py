@@ -14,7 +14,6 @@ class apis(models.Model):
     params = models.TextField(max_length=500)
     create_time = models.DateTimeField('创建时间', auto_now=True)
     status = models.BooleanField('状态')
-    files = models.FileField('测试文件-Excel', upload_to='./case', default='无')
 
     class Meta:
         verbose_name = "接口列表"
