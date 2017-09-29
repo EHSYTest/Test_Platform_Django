@@ -1,0 +1,24 @@
+{% extends "./admin/base_site.html" %}
+{% block title %}自动化测试平台{% endblock %}
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+      <a href="/index/"><strong>首页</strong></a>
+      &nbsp;&nbsp;&nbsp;&nbsp;<a href="/upload_case/"><strong>批量测试</strong></a>
+      &nbsp;&nbsp;&nbsp;&nbsp;<a href="/test_tools/"><strong>测试工具</strong></a>
+    </div>
+{% endblock %}
+{% block content %}
+{% block branding %}
+<h1 id="site-name">
+  <a href="/index/">自动化测试平台</a>
+</h1>
+{% endblock %}
+<div class="header-wrapper">
+</div>
+    <form action="/batch_test/" method="post" enctype="multipart/form-data" id="form-model">
+      <div>
+        <input type="file" name="myfile">
+        <input type="submit" value="OK"></input>
+      </div>
+    </form>
+{% endblock %}
