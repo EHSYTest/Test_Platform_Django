@@ -1,38 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="45ad1637-910c-47b8-917e-03564a61786b" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/Test_Platform_Django.iml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/case/inquiry.xls" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/case/inquiry_3cbUPzI.xls" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/case/inquiry_6WTucws.xls" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/case/inquiry_CgoHD6C.xls" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/case/inquiry_DBAORnR.xls" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/case/inquiry_VtVXkw3.xls" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/case/inquiry_c9Cjhjt.xls" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/case/inquiry_tGgqrnT.xls" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/case/test_0EcJgoB.xls" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/case/test_2YAFX51.xls" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/case/test_5nyXsBd.xls" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/case/test_7rtKVij.xls" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/case/test_KwpMszi.xls" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/case/test_N3fDXOM.xls" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/case/test_YoPtXrp.xls" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/case/test_f9fnYU6.xls" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/case/test_pQcTzyf.xls" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sign/templates/event_manage.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sign/templates/person_center.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sign/templates/sign_index.html" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/case/test.xls" afterPath="$PROJECT_DIR$/case/test.xls" />
+    <list default="true" id="45ad1637-910c-47b8-917e-03564a61786b" name="Default" comment="1">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sign/test_tools.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/guest/settings.py" afterPath="$PROJECT_DIR$/guest/settings.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/guest/urls.py" afterPath="$PROJECT_DIR$/guest/urls.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sign/admin.py" afterPath="$PROJECT_DIR$/sign/admin.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sign/hello.py" afterPath="$PROJECT_DIR$/sign/hello.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sign/models.py" afterPath="$PROJECT_DIR$/sign/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sign/templates/api_detail.html" afterPath="$PROJECT_DIR$/sign/templates/api_detail.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sign/templates/index.html" afterPath="$PROJECT_DIR$/sign/templates/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sign/views.py" afterPath="$PROJECT_DIR$/sign/views.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -132,11 +103,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="test_tools.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="test_tools.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/sign/test_tools.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="540">
-              <caret line="31" column="34" lean-forward="false" selection-start-line="31" selection-start-column="34" selection-end-line="31" selection-end-column="34" />
+            <state relative-caret-position="218">
+              <caret line="31" column="26" lean-forward="false" selection-start-line="31" selection-start-column="26" selection-end-line="31" selection-end-column="26" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
@@ -156,7 +127,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="settings.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="settings.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/guest/settings.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="176">
@@ -230,9 +201,9 @@
         <option value="$PROJECT_DIR$/sign/templates/upload_case.html" />
         <option value="$PROJECT_DIR$/sign/views.py" />
         <option value="$PROJECT_DIR$/guest/urls.py" />
-        <option value="$PROJECT_DIR$/sign/test_tools.py" />
         <option value="$PROJECT_DIR$/sign/templates/test_tools.html" />
         <option value="$PROJECT_DIR$/guest/settings.py" />
+        <option value="$PROJECT_DIR$/sign/test_tools.py" />
       </list>
     </option>
   </component>
@@ -258,6 +229,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -286,8 +259,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -519,7 +490,14 @@
       <option name="project" value="LOCAL" />
       <updated>1506662741460</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="1">
+      <created>1506662873747</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1506662873747</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TodoView">
@@ -533,8 +511,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="754" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18664643" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18968134" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32847896" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3284553" sideWeight="0.50292826" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28478965" sideWeight="0.49707174" order="2" side_tool="false" content_ui="tabs" />
@@ -902,16 +881,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sign/test_tools.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="31" column="34" lean-forward="false" selection-start-line="31" selection-start-column="34" selection-end-line="31" selection-end-column="34" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/sign/templates/test_tools.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="300">
@@ -938,6 +907,16 @@
         <state relative-caret-position="176">
           <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sign/test_tools.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="218">
+          <caret line="31" column="26" lean-forward="false" selection-start-line="31" selection-start-column="26" selection-end-line="31" selection-end-column="26" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
