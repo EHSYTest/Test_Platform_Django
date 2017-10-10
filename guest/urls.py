@@ -28,6 +28,6 @@ urlpatterns = [
     url(r'^api_detail', views.api_detail),
     url(r'^run_test', views.run_test),
     url(r'^upload_case', views.upload_case),
-    url(r'^test_tools', test_tools.test_tools),
-    url(r'invoice', test_tools.invoice)
+    url(r'^test_tools', views.test_tools),
+    url(r'tools_button', views.tools_button)
 ]

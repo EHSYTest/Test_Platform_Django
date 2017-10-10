@@ -4,7 +4,7 @@
     <div class="breadcrumbs">
       <a href="/index/"><strong>首页</strong></a>
       &nbsp;&nbsp;&nbsp;&nbsp;<a href="/upload_case/"><strong>批量测试</strong></a>
-      &nbsp;&nbsp;&nbsp;&nbsp;<a href="/index/"><strong>测试工具</strong></a>
+      &nbsp;&nbsp;&nbsp;&nbsp;<a href="/test_tools/"><strong>测试工具</strong></a>
     </div>
 {% endblock %}
 {% block content %}
@@ -15,11 +15,76 @@
 {% endblock %}
 <div class="header-wrapper">
 </div>
-    <form action="/invoice/" method="post" enctype="multipart/form-data" id="form-model">
-      <div>
-          <td class="text-left" width="100">发票编号</td><input name="num" value="{{invoice_value}}">
-          &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" value="OK">
-      </div>
+    <form action="/tools_button/" method="post" enctype="multipart/form-data" id="form-model">
+      <table>
+       <tr>
+            <td>
+                <label width="100">测试环境</label>
+            </td>
+            <td>
+                <select name="environment">
+                    {% if env %}
+                        <option value="{{env}}">{{env}}</option>
+                        <option value="{{env_b}}">{{env_b}}</option>
+                    {% else %}
+                        <option value="staging">staging</option>
+                        <option value="test">test</option>
+                    {% endif %}
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td class="text-left">SO单号</td>
+            <td>
+                <input name="so_value" type="text" value="{{so_value}}">
+            </td>
+            <td>
+                <input name="button" type="submit" value="财务收款">
+            </td>
+            <td>
+                <input name="button" type="submit" value="确认订单">
+            </td>
+            <td>
+                <input name="button" type="submit" value="生成PO">
+            </td>
+            <td>
+                <input name="button" type="submit" value="确认PO">
+            </td>
+            <td>
+                <input name="button" type="submit" value="非直发转直发">
+            </td>
+            <td>
+                <input name="button" type="submit" value="直发转非直发">
+            </td>
+            <td>
+                <input name="button" type="submit" value="供应商确认">
+            </td>
+            <td>
+                <input name="button" type="submit" value="PO发货">
+            </td>
+            <td>
+                <input name="button" type="submit" value="PO开票">
+            </td>
+        </tr>
+
+
+
+
+
+
+
+
+
+        <tr>
+            <td class="text-left">发票编号</td>
+            <td>
+                <input name="invoice_num" type="text" value="{{invoice_value}}">
+            </td>
+            <td>
+                &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" value="SO开票">
+            </td>
+        </tr>
+      </table>
     </form>
 
 

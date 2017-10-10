@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from sign.models import apis
 import requests, xlrd, json, os
 from django.contrib import messages
+from sign.test_tools import TestTools
 
 
 def index(request):
@@ -25,8 +26,7 @@ def run_test(request):
     api = apis.objects.get(id=id[0])
     method = api.method.lower()
     url = api.address
-    request.POST.pop('run_button')  # 只留下输入框填写的数据，去掉带过来的id值
-    test_data = request.POST
+    test_data = request.POST.copy().pop('run_button')    # 只留下输入框填写的数据，去掉带过来的id值
     print(test_data)
     if method == 'post':
         r = requests.post(url, data=test_data)
@@ -95,3 +95,46 @@ def batch_test(request):
             messages.error(request, tips)
             return render(request, 'upload_case.html')
 
+
+def test_tools(request):
+    return render(request, 'test_tools.html')
+
+
+def tools_button(request):
+    env = request.POST.get('environment')
+    so_value = request.POST.get('so_value', '')
+    tt = TestTools(env, so_value)   # TestTools类实例
+    action = request.POST.get('button')
+    if env == 'staging':
+        env_b = 'test'   # env_b标志另一个测试环境
+    elif env == 'test':
+        env_b = 'staging'
+    if so_value == '':
+        messages.error(request, '请输入SO单号')
+        return render(request, 'test_tools.html', {'so_value': so_value, 'env': env, 'env_b': env_b})
+    if action == '财务收款':
+        result = tt.order_payed()
+    if action == '确认订单':
+        result = tt.order_confirm()
+    if action == '生成PO':
+        result = tt.create_po()
+    if action == '确认PO':
+        result = tt.confirm_po()
+        messages.success(request, result)
+        return render(request, 'test_tools.html', {'so_value': so_value, 'env': env, 'env_b': env_b})
+    if action == '非直发转直发':
+        result = tt.po_change_to_zhifa()
+    if action == '直发转非直发':
+        result = tt.po_change_to_feizhifa()
+    if action == '供应商确认':
+        result = tt.supplier_confirm()
+    if action == 'PO发货':
+        result = tt.po_send()
+
+
+    if result['mark'] == '0':   # 接口返回mark为0表示成功
+        messages.success(request, result['message'])
+        return render(request, 'test_tools.html', {'so_value': so_value, 'env': env, 'env_b': env_b})
+    if result['mark'] != '0':
+        messages.error(request, result['message'])
+        return render(request, 'test_tools.html', {'so_value': so_value, 'env': env, 'env_b': env_b})
