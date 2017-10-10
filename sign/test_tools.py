@@ -128,7 +128,6 @@ class TestTools(object):
             params['sendQuantity'] = str(pu['quantity'])
             params['unit'] = pu['unit']
             deliveryList.append(params)
-        print(deliveryList)
         url = 'http://oc-' + self.env + '.ehsy.com/supplier/purchaseorder/deliver'
         operateData = {
             "purOrderId": po_id,
@@ -137,7 +136,6 @@ class TestTools(object):
             "sendCompanyName": "韵达快递",
             "deliveryList": deliveryList
         }
-        print(operateData)
         r = requests.post(url, data={'operateData': json.dumps(operateData)})
         result = r.json()
         return result
