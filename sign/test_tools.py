@@ -6,7 +6,7 @@ from django.contrib import messages
 
 
 class TestTools(object):
-    def __init__(self, env, order_id):
+    def __init__(self, env, order_id, num):
         self.env = env       # 测试环境标志： 1 - staging； 0 - test
         if self.env == 'staging':
             self.connection = pymysql.connect(
@@ -27,6 +27,7 @@ class TestTools(object):
                 cursorclass=pymysql.cursors.DictCursor
             )
         self.order_id = order_id
+        self.num = num
 
     def order_payed(self):
         url = 'http://oc-' + self.env + '.ehsy.com/orderCenter/payed'
@@ -140,31 +141,23 @@ class TestTools(object):
         result = r.json()
         return result
 
+    def so_invoice(self):
+        if self.env == 'staging':
+            connection = psycopg2.connect(
+                database="odoo-staging", user="openerp", password="openerp2016", host="118.178.133.107", port="5432"
+            )
+        if self.env == 'test':
+            connection = psycopg2.connect(
+                database="odoo-test", user="openerp", password="ehsy_erp", host="118.178.238.29", port="5432"
+            )
+        try:
+            cur = connection.cursor()
+            now_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
+            cur.execute("update account_invoice_apply set invoiced_num='123456789', name='123456789', invoiced_date='" + now_time + "', state = 'done' where num = '"+self.num+"'")
+            connection.commit()
+        except Exception:
+            return 'error'
 
-
-    # def invoice(self):
-    #     num = request.POST.get('num', '')
-    #     if num == '':
-    #         messages.error(request, '请输入发票编号')
-    #         return render(request, 'test_tools.html', {'invoice_value': num})
-    #     env = request.POST.get('environment')
-    #     if env == '1':
-    #         connection = psycopg2.connect(
-    #             database="odoo-staging", user="openerp", password="openerp2016", host="118.178.133.107", port="5432"
-    #         )
-    #     if env == '0':
-    #         connection = psycopg2.connect(
-    #             database="odoo-test", user="openerp", password="ehsy_erp", host="118.178.238.29", port="5432"
-    #         )
-    #     try:
-    #         cur = connection.cursor()
-    #         now_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
-    #         cur.execute("update account_invoice_apply set invoiced_num='123456789', name='123456789', invoiced_date='" + now_time + "', state = 'done' where num = '"+num+"'")
-    #         connection.commit()
-    #     except Exception:
-    #         messages.error(request, 'Error')
-    #         return render(request, 'test_tools.html', {'invoice_value': num})
-    #
-    #     else:
-    #         messages.success(request, '受影响的行数：' + str(cur.rowcount))
-    #         return render(request, 'test_tools.html', {'invoice_value': num})
+        else:
+            result = '受影响的行数：' + str(cur.rowcount)
+            return result

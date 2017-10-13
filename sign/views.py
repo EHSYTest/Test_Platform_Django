@@ -103,15 +103,16 @@ def test_tools(request):
 def tools_button(request):
     env = request.POST.get('environment')
     so_value = request.POST.get('so_value', '')
-    tt = TestTools(env, so_value)   # TestTools类实例
+    num = request.POST.get('invoice_num', '')
+    tt = TestTools(env, so_value, num)   # TestTools类实例
     action = request.POST.get('button')
     if env == 'staging':
         env_b = 'test'   # env_b标志另一个测试环境
     elif env == 'test':
         env_b = 'staging'
-    if so_value == '':
-        messages.error(request, '请输入SO单号')
-        return render(request, 'test_tools.html', {'so_value': so_value, 'env': env, 'env_b': env_b})
+    # if so_value == '':
+    #     messages.error(request, '请输入SO单号')
+    #     return render(request, 'test_tools.html', {'so_value': so_value, 'env': env, 'env_b': env_b})
     if action == '财务收款':
         result = tt.order_payed()
     if action == '确认订单':
@@ -121,7 +122,7 @@ def tools_button(request):
     if action == '确认PO':
         result = tt.confirm_po()
         messages.success(request, result)
-        return render(request, 'test_tools.html', {'so_value': so_value, 'env': env, 'env_b': env_b})
+        return render(request, 'test_tools.html', {'so_value': so_value, 'env': env, 'env_b': env_b, 'invoice_value': num})
     if action == '非直发转直发':
         result = tt.po_change_to_zhifa()
     if action == '直发转非直发':
@@ -130,11 +131,21 @@ def tools_button(request):
         result = tt.supplier_confirm()
     if action == 'PO发货':
         result = tt.po_send()
-
+    if action == 'SO开票':
+        result = tt.so_invoice()
+        if result == 'error':
+            messages.error(request, 'Error')
+            return render(request, 'test_tools.html', {'so_value': so_value, 'env': env, 'env_b': env_b, 'invoice_value': num})
+        else:
+            messages.success(request, result)
+            return render(request, 'test_tools.html', {'so_value': so_value, 'env': env, 'env_b': env_b, 'invoice_value': num})
 
     if result['mark'] == '0':   # 接口返回mark为0表示成功
         messages.success(request, result['message'])
-        return render(request, 'test_tools.html', {'so_value': so_value, 'env': env, 'env_b': env_b})
+        return render(request, 'test_tools.html', {'so_value': so_value, 'env': env, 'env_b': env_b, 'invoice_value': num})
     if result['mark'] != '0':
         messages.error(request, result['message'])
-        return render(request, 'test_tools.html', {'so_value': so_value, 'env': env, 'env_b': env_b})
+        return render(request, 'test_tools.html', {'so_value': so_value, 'env': env, 'env_b': env_b, 'invoice_value': num})
+
+
+

@@ -13,12 +13,19 @@
   <a href="/index/">自动化测试平台</a>
 </h1>
 {% endblock %}
+{% load staticfiles %}
 <div class="header-wrapper">
 </div>
     <form action="/batch_test/" method="post" enctype="multipart/form-data" id="form-model">
       <div>
         <input type="file" name="myfile">
-        <input type="submit" value="OK"></input>
+        <input type="submit" value="OK">
       </div>
     </form>
+<div class="row">
+      <div class="col-md-8 col-md-offset-2">
+          <br>
+          <a href="{% static "file/temp.xls" %}">下载模板</a>
+      </div>
+</div>
 {% endblock %}
