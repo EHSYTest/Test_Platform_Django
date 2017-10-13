@@ -45,10 +45,12 @@ class TestTools(object):
 
     def create_po(self):
         cursor = self.connection.cursor()
+        # 查SO的所有PU
         cursor.execute("select pu_id, sku_code, quantity from oc.purchase_order_unit where order_id='"+self.order_id+"'")
         query_dict = cursor.fetchall()
         url = 'http://oc-' + self.env + '.ehsy.com/puPoolManage/mergePuList'
         data_data = []
+        # 遍历PU，构建data参数信息
         for pu in query_dict:
             param = {}
             param['puId'] = pu['pu_id']
@@ -57,6 +59,7 @@ class TestTools(object):
             param['QUANTITY'] = str(pu['quantity'])
             data_data.append(param)
         print(data_data)
+        # 接口参数赋值
         queryData = {
             "supplierId": "2",
             "userId": "1000",
@@ -66,6 +69,7 @@ class TestTools(object):
             "payType": "1",
             "supplierWarehouse": "C01"
         }
+        # 接口调用
         r = requests.post(url, data={'queryData': json.dumps(queryData)})
         result = r.json()
         print(result)
@@ -90,6 +94,7 @@ class TestTools(object):
 
     def po_change_to_feizhifa(self):
         cursor = self.connection.cursor()
+        # 获取PO单号
         cursor.execute("select pur_order_id from oc.purchase_order where order_id= '" + self.order_id + "'")
         po = cursor.fetchall()[0]['pur_order_id']
         url = 'http://oc-' + self.env + '.ehsy.com/admin/purchaseorder/poChangeNonStopFlag'
@@ -100,12 +105,14 @@ class TestTools(object):
 
     def supplier_confirm(self):
         cursor = self.connection.cursor()
-        cursor.execute("select pur_order_id from oc.purchase_order where order_id= '" + self.order_id + "'")
-        po = cursor.fetchall()[0]['pur_order_id']
+        cursor.execute("select pur_order_id,supplier_id from oc.purchase_order where order_id= '" + self.order_id + "'")
+        sql_result = cursor.fetchall()
+        po = sql_result[0]['pur_order_id']
+        supplier_id = str(sql_result[0]['supplier_id'])
         url = 'http://oc-' + self.env + '.ehsy.com/supplier/purchaseorder/confirm'
         operateData = {
-            'purOrderId': 'PO150667554030163175',
-            'supplierId': '2'
+            'purOrderId': po,
+            'supplierId': supplier_id
         }
         r = requests.post(url, data={'operateData': json.dumps(operateData)})
         result = r.json()
