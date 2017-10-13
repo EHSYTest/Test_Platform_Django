@@ -26,8 +26,8 @@ def run_test(request):
     api = apis.objects.get(id=id[0])
     method = api.method.lower()
     url = api.address
-    test_data = request.POST.copy().pop('run_button')    # 只留下输入框填写的数据，去掉带过来的id值
-    print(test_data)
+    test_data = request.POST.copy()
+    test_data.pop('run_button')  # 只留下输入框填写的数据，去掉带过来的id值
     if method == 'post':
         r = requests.post(url, data=test_data)
     if method == 'get':
