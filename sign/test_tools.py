@@ -9,6 +9,7 @@ class TestTools(object):
     def __init__(self, env, order_id, num):
         self.env = env       # 测试环境标志： 1 - staging； 0 - test
         if self.env == 'staging':
+            # 连接staging——OC数据库
             self.connection = pymysql.connect(
                 host='118.178.189.137',
                 user='ehsy_pc',
@@ -18,6 +19,7 @@ class TestTools(object):
                 cursorclass=pymysql.cursors.DictCursor   # sql查询结果转为字典类型
             )
         elif self.env == 'test':
+            # test——OC数据库
             self.connection = pymysql.connect(
                 host='118.178.135.2',
                 user='root',
@@ -26,10 +28,11 @@ class TestTools(object):
                 charset='utf8',
                 cursorclass=pymysql.cursors.DictCursor
             )
-        self.order_id = order_id
-        self.num = num
+        self.order_id = order_id        # 传入的SO编号
+        self.num = num      # 传入的发票编号
 
     def order_payed(self):
+        """财务收款"""
         url = 'http://oc-' + self.env + '.ehsy.com/orderCenter/payed'
         data = {'orderId': self.order_id, 'payWay': '0'}
         r = requests.post(url, data=data)
@@ -37,6 +40,7 @@ class TestTools(object):
         return result
 
     def order_confirm(self):
+        """SO确认"""
         url = 'http://oc-' + self.env + '.ehsy.com/orderCenter/confirmOrder'
         data = {"orderId": self.order_id}
         r = requests.post(url, data=data)
@@ -44,13 +48,16 @@ class TestTools(object):
         return result
 
     def create_po(self):
+        """创建PO"""
         cursor = self.connection.cursor()
+
         # 查SO的所有PU
         cursor.execute("select pu_id, sku_code, quantity from oc.purchase_order_unit where order_id='"+self.order_id+"'")
         query_dict = cursor.fetchall()
         url = 'http://oc-' + self.env + '.ehsy.com/puPoolManage/mergePuList'
         data_data = []
-        # 遍历PU，构建data参数信息
+
+        # 遍历PU，构建接口调用的data参数信息
         for pu in query_dict:
             param = {}
             param['puId'] = pu['pu_id']
@@ -59,6 +66,7 @@ class TestTools(object):
             param['QUANTITY'] = str(pu['quantity'])
             data_data.append(param)
         print(data_data)
+
         # 接口参数赋值
         queryData = {
             "supplierId": "2",
@@ -69,6 +77,7 @@ class TestTools(object):
             "payType": "1",
             "supplierWarehouse": "C01"
         }
+
         # 接口调用
         r = requests.post(url, data={'queryData': json.dumps(queryData)})
         result = r.json()
@@ -76,6 +85,9 @@ class TestTools(object):
         return result
 
     def confirm_po(self):
+        """确认PO"""
+
+        # 更改数据库purchase_order表po_status字段值
         cursor = self.connection.cursor()
         cursor.execute("update oc.purchase_order set po_status =0 where order_id = '"+self.order_id+"'")
         self.connection.commit()
@@ -83,9 +95,10 @@ class TestTools(object):
         return '更新行数:'+str(row_count)
 
     def po_change_to_zhifa(self):
+        """PO单非直发转直发"""
         cursor = self.connection.cursor()
         cursor.execute("select pur_order_id from oc.purchase_order where order_id= '"+self.order_id+"'")
-        po = cursor.fetchall()[0]['pur_order_id']
+        po = cursor.fetchall()[0]['pur_order_id']   # 获取PO单号
         url = 'http://oc-' + self.env + '.ehsy.com/admin/purchaseorder/poChangeNonStopFlag'
         r = requests.post(url, data={
             'purOrderId': po, 'nonStopFlag': '1'})
@@ -93,6 +106,7 @@ class TestTools(object):
         return result
 
     def po_change_to_feizhifa(self):
+        """直发转非直发"""
         cursor = self.connection.cursor()
         # 获取PO单号
         cursor.execute("select pur_order_id from oc.purchase_order where order_id= '" + self.order_id + "'")
@@ -104,6 +118,7 @@ class TestTools(object):
         return result
 
     def supplier_confirm(self):
+        """供应商确认"""
         cursor = self.connection.cursor()
         cursor.execute("select pur_order_id,supplier_id from oc.purchase_order where order_id= '" + self.order_id + "'")
         sql_result = cursor.fetchall()
@@ -119,12 +134,13 @@ class TestTools(object):
         return result
 
     def po_send(self):
+        """PO发货（全部发货）"""
         cursor = self.connection.cursor()
         cursor.execute("select id,pur_order_id,sku_code,quantity,product_name,unit from oc.purchase_order_unit where order_id='"+self.order_id+"'")
         query_dict1 = cursor.fetchall()
         cursor.execute("select pur_order_id, supplier_id from oc.purchase_order where order_id='"+self.order_id+"'")
         query_dict2 = cursor.fetchall()
-        deliveryList = []
+        deliveryList = []   # 发货详情参数
         po_id = query_dict2[0]['pur_order_id']
         supplier_id = str(query_dict2[0]['supplier_id'])
         for pu in query_dict1:
@@ -144,11 +160,12 @@ class TestTools(object):
             "sendCompanyName": "韵达快递",
             "deliveryList": deliveryList
         }
-        r = requests.post(url, data={'operateData': json.dumps(operateData)})
+        r = requests.post(url, data={'operateData': json.dumps(operateData)})   # 接口为key:json格式
         result = r.json()
         return result
 
     def so_invoice(self):
+        """SO开票-Odoo"""
         if self.env == 'staging':
             connection = psycopg2.connect(
                 database="odoo-staging", user="openerp", password="openerp2016", host="118.178.133.107", port="5432"
