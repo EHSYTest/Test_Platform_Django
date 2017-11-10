@@ -82,15 +82,15 @@ def batch_test(request):
         report_table.write(0, 2, '接口URL', styleBlueBkg)
         report_table.write(0, 3, 'message', styleBlueBkg)
         report_table.write(0, 4, '执行结果', styleBlueBkg)
-        report_table.write(0, 5, '执行时间(ms)', styleBlueBkg)
-        first_col = report_table.col(1) # 获取列
+        report_table.write(0, 5, '执行时间(s)', styleBlueBkg)
+        first_col = report_table.col(1)    # 获取列
         second_col = report_table.col(2)
-        third_col = report_table(3)
+        third_col = report_table.col(3)
         four_col = report_table.col(5)
-        first_col.width = 256*10 #设置列宽
+        first_col.width = 256*10     # 设置列宽
         second_col.width = 256*50
         third_col.width = 256*10
-        four_col.width = 256*10
+        four_col.width = 256*15
         report.save('./sign/static/file/report.xls')
         for row in range(1, rows):
             excel_data = table.row_values(row)  # 获取当前行的数据（列表对象）
@@ -106,8 +106,7 @@ def batch_test(request):
                 params = eval(params)
                 r = requests.get(url, params=params)
             end_time = datetime.datetime.now()
-            run_time = (end_time - start_time).microseconds
-            run_time = run_time/1000
+            run_time = str(end_time - start_time)[6:10]
             if method != 'post' and method != 'get':
                 messages.error(request, 'Method填写错误')
                 return render(request, 'upload_case.html')
@@ -126,7 +125,7 @@ def batch_test(request):
                 rows_fail.append(str(row + 1))
                 fail_reason.append(result['message'])
                 report_table.write(row, 4, 'fail', font_color)
-            report_table.write(row,5,run_time)
+            report_table.write(row, 5, run_time)
             report.save('./sign/static/file/report.xls')
         tips = {'成功': p, '失败': f, '失败行数': (','.join(rows_fail) or '无'), '失败原因': (','.join(fail_reason) or '无')}
         if f != 0:
@@ -137,10 +136,6 @@ def batch_test(request):
         else:
             messages.error(request, tips)
             return render(request, 'upload_case.html')
-
-
-
-
 
 
 def test_tools(request):
