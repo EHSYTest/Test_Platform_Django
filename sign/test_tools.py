@@ -29,7 +29,61 @@ class TestTools(object):
                 cursorclass=pymysql.cursors.DictCursor
             )
         self.order_id = order_id        # 传入的SO编号
-        self.num = num      # 传入的发票编号
+        self.num = num      # 传入的发票编
+
+    def login(self):
+        url = 'http://passport-' + self.env + '.ehsy.com/uc/user/login.action'
+        data = {'login_name': '18751551645', 'login_password': '111qqq', 'terminal_type': 'pc',
+                'isRememberCount': 'false'}
+        r = requests.post(url, data=data)
+        result = r.json()
+        token = result['sys']['token']
+        print(token)
+        return result
+
+    def create_order(self, token):
+        """生成订单"""
+        url1 = 'http://oc-' + self.env + '.ehsy.com/cart/add'
+        data1 = [{'skuCode':'MVX456','quantity':'2'}, {'skuCode':'MAB243','quantity':'2'}]
+        data = {'token': token, 'data': data1}
+        r1 = requests.post(url1, json=data)
+        result1 = r1.json()
+        url2 = 'http://oc-' + self.env + '.ehsy.com/order/createOrderNew'
+        addedInvoices = [{"bank": "招商银行", "bankAccount": "2343345466", "hasAdminAuth": "0", "invoiceId": "10008247487",
+                         'isDefault': "0",  "regAdd": "金科路1122号", "regTel": "18751551645", "selected": 'true',"subType":'',
+                          "taxpayerCode": "123456789009876123", "title": "测试账号公司tina", "type":"2", "typeCompany":'false',
+                          'typeDesc': '增值税发票'}]
+        deliverAdds = [{ "address":"江苏省南京市高淳县新街口", "addressId": "10008284154", "addressUserType":"1", "areaId":"220",
+                         "city":"南京市", "company":"测试账号", "detailedAddress":"新街口", "district":"高淳县",
+                         "email":"233213@qq.com", "hasAdminAuth":"0", "isDefault":"1", "mobile":"18751551645", "name":"史佐兄",
+                         "postcode":"900414", "province":"江苏省", "selected":'true', "tel":"021-33338888"}]
+        invoicesAdds = [{"address":"上海市上海市浦东新区金科路", "addressId":"10008284152", "addressUserType":"1", "areaId":"321",
+                         "city":"上海市", "company":"测试账号电子公司", "detailedAddress":"金科路", "district":"浦东新区",
+                         "email":"", "hasAdminAuth":"0", "isDefault":"1", "mobile":"18751551645", "name":"史佐兄",
+                         "postcode": "900414","province": "上海市", "selected": 'true', "tel":""}]
+        data = {'token': token, 'addedInvoices': addedInvoices, 'deliverAdds': deliverAdds, 'deliveryTimeType': '0',
+                'invoicesAdds': invoicesAdds, 'payType': '0', 'createFrom': 'pc'}
+        r2 = requests.post(url2, json=data)
+        result2 = r2.json()  #字典格式
+        # result = json.dumps(result2)  #json格式
+        # orderId = result2['data']['orderId']
+        return result2
+
+    # def order_detail(self, token, orderId):
+    def order_detail(self, token):
+        url = 'http://oc-' + self.env + '.ehsy.com/order/getInfo'
+        data = {'token': token, 'orderId':self.order_id, 'createTimeFrom':'2017-02-15', 'createTimeTo':'2017-08-15'}
+        r = requests.post(url,data)
+        result = r.json()
+        return result
+
+    def order_cancel(self):
+        """查询so中可取消sku"""
+        url = 'http://oc-' + self.env + '.ehsy.com/orderCenter/cancel'
+        data = {'orderId': self.order_id,'userId':'508110571'}
+        r = requests.post(url, data)
+        result = r.json()
+        return result
 
     def order_payed(self):
         """财务收款"""
@@ -52,8 +106,9 @@ class TestTools(object):
         cursor = self.connection.cursor()
 
         # 查SO的所有PU
-        cursor.execute("select pu_id, sku_code, quantity from oc.purchase_order_unit where order_id='"+self.order_id+"'")
+        cursor.execute("select pu_id, sku_code, quantity from oc.purchase_order_unit where order_id='SO150900275843271000'")
         query_dict = cursor.fetchall()
+        print(query_dict)
         url = 'http://oc-' + self.env + '.ehsy.com/puPoolManage/mergePuList'
         data_data = []
 

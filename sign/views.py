@@ -2,23 +2,23 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from sign.models import apis
-import requests, xlrd, json, os
+import requests, xlrd,xlwt, json, os
+from xlwt import Style
 from django.contrib import messages
 from sign.test_tools import TestTools
-
+import datetime
 
 def index(request):
     """index首页"""
-    api_list = apis.objects.all()
-    return render(request, 'index.html', {'api_list': api_list})
-
+    api_list = apis.objects.all()  # 通过objects这个模型管理器的all()获得apis表中所有数据行，相当于SQL中的SELECT * FROM
+    return render(request, 'index.html', {'api_list': api_list}) #返回获取的数据行
 
 def api_detail(request):
     """接口详情页"""
     url = request.path   # 获取当前地址url
     loc_start = url.rindex('_')+1    # 从url中获取接口ID的索引位置
     id = url[loc_start:]            # 获取接口ID
-    api = apis.objects.get(id=id)
+    api = apis.objects.get(id=id)   #获取单个对象，通过id值获取数据行
     params_list = (api.params.strip()).split(',')   # 将数据库中params字段值拆分成列表，在HTML上打印出来
     return render(request, 'api_detail.html', {'api': api, 'params': params_list})
 
@@ -26,13 +26,19 @@ def api_detail(request):
 def run_test(request):
     """接口详情-单个接口调用"""
     id = request.POST.getlist('run_button')  # 获取run_button的value值（即接口ID），取得的是列表
-    api = apis.objects.get(id=id[0])
+    print(id)
+    api = apis.objects.get(id=id[0]) #获取单个对象，通过id值获取数据行
+    print(api)
     method = api.method.lower()
+    print(method)
     url = api.address
+    print(url)
     test_data = request.POST.copy()         # copy request请求对象（因为原request请求对象不可更改）
+    print(test_data)
     test_data.pop('run_button')  # 只留下输入框填写的数据，去掉带过来的id值
     if method == 'post':
         r = requests.post(url, data=test_data)
+        print(r)
     if method == 'get':
         r = requests.get(url, data=test_data)
     result = r.json()
@@ -41,7 +47,6 @@ def run_test(request):
     if result['mark'] != '0':
         messages.error(request, result['message'])
     return render(request, 'api_detail.html', {'api': api, 'test_data': test_data})     # 输入框数据原样返回
-
 
 def upload_case(request):
     """批量测试HTML对应view函数"""
@@ -67,29 +72,62 @@ def batch_test(request):
         data = xlrd.open_workbook(file)
         table = data.sheet_by_index(0)      # 读取excel sheet页
         rows = table.nrows      # 获取当前sheet页数据行数
+        # 接口测试报告
+        report = xlwt.Workbook()
+        report_table = report.add_sheet('接口测试结果')
+        styleBlueBkg = xlwt.easyxf('pattern: pattern solid, fore_colour gray50')
+        font_color = xlwt.easyxf('font: colour_index red')
+        report_table.write(0,0,'序号', styleBlueBkg)
+        report_table.write(0, 1, '接口名称', styleBlueBkg)
+        report_table.write(0, 2, '接口URL', styleBlueBkg)
+        report_table.write(0, 3, 'message', styleBlueBkg)
+        report_table.write(0, 4, '执行结果', styleBlueBkg)
+        report_table.write(0, 5, '执行时间(ms)', styleBlueBkg)
+        first_col = report_table.col(1) # 获取列
+        second_col = report_table.col(2)
+        third_col = report_table(3)
+        four_col = report_table.col(5)
+        first_col.width = 256*10 #设置列宽
+        second_col.width = 256*50
+        third_col.width = 256*10
+        four_col.width = 256*10
+        report.save('./sign/static/file/report.xls')
         for row in range(1, rows):
             excel_data = table.row_values(row)  # 获取当前行的数据（列表对象）
             url = excel_data[2]
             method = excel_data[3].lower()
             params = excel_data[4]
             message_assert = excel_data[5].strip()      # strip去掉首尾空格
+            start_time = datetime.datetime.now()
             if method == 'post':
                 params = eval(params)    # excel表中的字符串转换为字典
                 r = requests.post(url, data=params)
             if method == 'get':
                 params = eval(params)
                 r = requests.get(url, params=params)
+            end_time = datetime.datetime.now()
+            run_time = (end_time - start_time).microseconds
+            run_time = run_time/1000
             if method != 'post' and method != 'get':
                 messages.error(request, 'Method填写错误')
                 return render(request, 'upload_case.html')
             result = r.json()
             print(result['message'])
+            # 接口测试报告写入
+            report_table.write(row,0,row)
+            report_table.write(row,1,excel_data[1])
+            report_table.write(row, 2, url)
+            report_table.write(row, 3, result['message'])
             if result['message'] == message_assert:     # 断言
                 p += 1
+                report_table.write(row, 4, 'pass')
             else:
                 f += 1
                 rows_fail.append(str(row + 1))
                 fail_reason.append(result['message'])
+                report_table.write(row, 4, 'fail', font_color)
+            report_table.write(row,5,run_time)
+            report.save('./sign/static/file/report.xls')
         tips = {'成功': p, '失败': f, '失败行数': (','.join(rows_fail) or '无'), '失败原因': (','.join(fail_reason) or '无')}
         if f != 0:
             flag = False
@@ -101,8 +139,13 @@ def batch_test(request):
             return render(request, 'upload_case.html')
 
 
+
+
+
+
 def test_tools(request):
     """测试工具页HTML对应view函数"""
+    # env = 'staging'
     return render(request, 'test_tools.html')
 
 
@@ -113,12 +156,47 @@ def tools_button(request):
     num = request.POST.get('invoice_num', '')       # 获取输入的发票编号
     tt = TestTools(env, so_value, num)   # test_tools模块类实例
     action = request.POST.get('button')     # 从button的value值分析所需要进行的操作
+    result = {}
     if env == 'staging':
         env_b = 'test'   # env_b标志另一个测试环境（select下拉选项的另一个，为了最终原样返回选择的环境）
     elif env == 'test':
         env_b = 'staging'
+    if action == '获取Token':
+        result = tt.login()
+        request.session['token'] = result['sys']['token']
+    if action == '生成订单': # test_tools模块对应函数
+        token = request.session.get('token', '')
+        if not token:
+            messages.error(request, 'No Token')
+            return render(request, 'test_tools.html', {'so_value': so_value, 'env': env, 'env_b': env_b, 'invoice_value': num})
+        result = tt.create_order(token)
+        if result['mark'] == '0':
+            messages.success(request, result['data']['orderId'])
+            return render(request, 'test_tools.html', {'so_value': so_value, 'env': env, 'env_b': env_b, 'invoice_value': num})
+        else:
+            messages.error(request, result['message'])
+            return render(request, 'test_tools.html', {'so_value': so_value, 'env': env, 'env_b': env_b, 'invoice_value': num})
+    if action == '订单详情':
+        token = request.session.get('token', '')
+        if not token:
+            messages.error(request, 'No Token')
+            return render(request, 'test_tools.html', {'so_value': so_value, 'env': env, 'env_b': env_b, 'invoice_value': num})
+        result = tt.order_detail(token)
+        if result['mark'] == '0':
+            messages.success(request, result)
+            return render(request, 'test_tools.html', {'so_value': so_value, 'env': env, 'env_b': env_b, 'invoice_value': num})
+        else:
+            messages.error(request, result['message'])
+            return render(request, 'test_tools.html',{'so_value': so_value, 'env': env, 'env_b': env_b, 'invoice_value': num})
+    if action == '订单取消':
+        # token = request.session.get('token')
+        # if not token:
+        #     messages.error(request, 'No token')
+        #     return render(request, 'test_tools.html',{'so_value': so_value, 'env': env, 'env_b': env_b, 'invoice_value': num})
+        # result = tt.order_cancel(token)
+         result = tt.order_cancel()
     if action == '财务收款':
-        result = tt.order_payed()       # test_tools模块对应函数
+        result = tt.order_payed()
     if action == '确认订单':
         result = tt.order_confirm()
     if action == '生成PO':
@@ -143,7 +221,6 @@ def tools_button(request):
         else:
             messages.success(request, result)
             return render(request, 'test_tools.html', {'so_value': so_value, 'env': env, 'env_b': env_b, 'invoice_value': num})
-
     if result['mark'] == '0':   # 接口返回mark为0表示成功
         messages.success(request, result['message'])
         return render(request, 'test_tools.html', {'so_value': so_value, 'env': env, 'env_b': env_b, 'invoice_value': num})

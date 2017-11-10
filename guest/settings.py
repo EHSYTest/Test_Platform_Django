@@ -78,12 +78,12 @@ WSGI_APPLICATION = 'guest.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'rick_django',
-        'USER': 'django',
-        'PASSWORD': 'django',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'vivien_django',
+        'USER': 'vivien',
+        'PASSWORD': 'vivien',
         'HOST': 'localhost',
-        'PORT': '5432',
+        'PORT': '3306',
         },
 
 }
