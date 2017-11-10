@@ -3,6 +3,9 @@ import psycopg2, pymysql, json
 import time
 from django.shortcuts import render
 from django.contrib import messages
+import sys
+import datetime
+from xmlrpc import client
 
 
 class TestTools(object):
@@ -221,22 +224,23 @@ class TestTools(object):
 
     def so_invoice(self):
         """SO开票-Odoo"""
-        if self.env == 'staging':
-            connection = psycopg2.connect(
-                database="odoo-staging", user="openerp", password="openerp2016", host="118.178.133.107", port="5432"
-            )
-        if self.env == 'test':
-            connection = psycopg2.connect(
-                database="odoo-test", user="openerp", password="ehsy_erp", host="118.178.238.29", port="5432"
-            )
+        dbname = 'odoo-staging'
+        usr = 'admin'
+        pwd = 'admin'
+        oe_ip = '118.178.133.107:8069'
+
         try:
-            cur = connection.cursor()
-            now_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
-            cur.execute("update account_invoice_apply set invoiced_num='123456789', name='123456789', invoiced_date='" + now_time + "', state = 'done' where num = '"+self.num+"'")
-            connection.commit()
+            sock_common = client.ServerProxy('http://' + oe_ip + '/xmlrpc/common')
+            uid = sock_common.login(dbname, usr, pwd)
+
+            sock = client.ServerProxy('http://' + oe_ip + '/xmlrpc/object')
+            a = sock.execute(dbname, uid, pwd, 'account.invoice.apply', 'search_read',
+                             [('num', '=', self.num), ('state', '!=', 'cancel')])
+            for i in a:
+                sock.execute(dbname, uid, pwd, 'account.invoice.apply', 'write', i['id'],
+                             {'state': 'done', 'invoiced_num': '123456789', 'name': '123456789',
+                              'invoiced_date': datetime.datetime.now().strftime('%Y -%m-%d %H:%M:%S')})
         except Exception:
             return 'error'
-
         else:
-            result = '受影响的行数：' + str(cur.rowcount)
-            return result
+            return 'Success'
