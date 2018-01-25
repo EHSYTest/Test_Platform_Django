@@ -9,30 +9,51 @@ from xmlrpc import client
 
 
 class TestTools(object):
-    def __init__(self, env, order_id, num):
+    def __init__(self, env, order_id, num, po_id, oc_db=False, odoo_flag=False, odoo_db=False):
         self.env = env       # 测试环境标志： 1 - staging； 0 - test
-        if self.env == 'staging':
-            # 连接staging——OC数据库
-            self.connection = pymysql.connect(
-                host='118.178.189.137',
-                user='ehsy_pc',
-                password='ehsy2016',
-                port=3306,
-                charset='utf8',
-                cursorclass=pymysql.cursors.DictCursor   # sql查询结果转为字典类型
-            )
-        elif self.env == 'test':
-            # test——OC数据库
-            self.connection = pymysql.connect(
-                host='118.178.135.2',
-                user='root',
-                password='ehsy2016',
-                port=3306,
-                charset='utf8',
-                cursorclass=pymysql.cursors.DictCursor
-            )
         self.order_id = order_id        # 传入的SO编号
         self.num = num      # 传入的发票编
+        self.po_id = po_id
+        if oc_db:
+            if self.env == 'staging':
+                # 连接staging——OC数据库
+                self.connection = pymysql.connect(
+                    host='118.178.189.137',
+                    user='ehsy_pc',
+                    password='ehsy2016',
+                    port=3306,
+                    charset='utf8',
+                    cursorclass=pymysql.cursors.DictCursor   # sql查询结果转为字典类型
+                )
+            elif self.env == 'test':
+                # test——OC数据库
+                self.connection = pymysql.connect(
+                    host='118.178.135.2',
+                    user='root',
+                    password='ehsy2016',
+                    port=3306,
+                    charset='utf8',
+                    cursorclass=pymysql.cursors.DictCursor
+                )
+        if odoo_flag:
+            if self.env == 'staging':
+                self.dbname = 'odoo-staging'
+                self.usr = 'admin'
+                self.pwd = 'admin'
+                self.oe_ip = 'localhost:8069'
+                self.sock_common = client.ServerProxy('http://' + self.oe_ip + '/xmlrpc/common')
+                self.uid = self.sock_common.login(self.dbname, self.usr, self.pwd)
+                self.sock = client.ServerProxy('http://' + self.oe_ip + '/xmlrpc/object')
+        if odoo_db:
+            if self.env == 'staging':
+                self.con = psycopg2.connect(
+                    host='118.178.133.107',
+                    port=5432,
+                    user='openerp',
+                    password='openerp2016',
+                    database='odoo-staging',
+                )
+                self.cr = self.con.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
     def login(self):
         url = 'http://passport-' + self.env + '.ehsy.com/uc/user/login.action'
@@ -67,8 +88,8 @@ class TestTools(object):
         data = {'token': token, 'addedInvoices': addedInvoices, 'deliverAdds': deliverAdds, 'deliveryTimeType': '0',
                 'invoicesAdds': invoicesAdds, 'payType': '0', 'createFrom': 'pc'}
         r2 = requests.post(url2, json=data)
-        result2 = r2.json()  #字典格式
-        # result = json.dumps(result2)  #json格式
+        result2 = r2.json()  # 字典格式
+        # result = json.dumps(result2)  # json格式
         # orderId = result2['data']['orderId']
         return result2
 
@@ -104,123 +125,85 @@ class TestTools(object):
         result = r.json()
         return result
 
+    def create_delivery(self):
+        vals = {
+            'so': self.order_id
+        }
+        result = self.sock.execute(self.dbname, self.uid, self.pwd, 'used.by.tester', 'test_button_create_delivery', vals)
+        return result
+
     def create_po(self):
         """创建PO"""
-        cursor = self.connection.cursor()
-
-        # 查SO的所有PU
-        cursor.execute("select pu_id, sku_code, quantity from oc.purchase_order_unit where order_id='SO150900275843271000'")
-        query_dict = cursor.fetchall()
-        print(query_dict)
-        url = 'http://oc-' + self.env + '.ehsy.com/puPoolManage/mergePuList'
-        data_data = []
-
-        # 遍历PU，构建接口调用的data参数信息
-        for pu in query_dict:
-            param = {}
-            param['puId'] = pu['pu_id']
-            param['skuCode'] = pu['sku_code']
-            param['finalBidPrice'] = '100'
-            param['QUANTITY'] = str(pu['quantity'])
-            data_data.append(param)
-        print(data_data)
-
-        # 接口参数赋值
-        queryData = {
-            "supplierId": "2",
-            "userId": "1000",
-            "userName": "1000",
-            "data": data_data,
-            "poFinalTransferAmt": "20",
-            "payType": "1",
-            "supplierWarehouse": "C01"
+        vals = {
+            'so': self.order_id
         }
-
-        # 接口调用
-        r = requests.post(url, data={'queryData': json.dumps(queryData)})
-        result = r.json()
-        print(result)
+        result = self.sock.execute(self.dbname, self.uid, self.pwd, 'used.by.tester', 'test_create_po', vals)
         return result
 
     def confirm_po(self):
-        """确认PO"""
-
-        # 更改数据库purchase_order表po_status字段值
-        cursor = self.connection.cursor()
-        cursor.execute("update oc.purchase_order set po_status =0 where order_id = '"+self.order_id+"'")
-        self.connection.commit()
-        row_count = cursor.rowcount
-        return '更新行数:'+str(row_count)
-
-    def po_change_to_zhifa(self):
-        """PO单非直发转直发"""
-        cursor = self.connection.cursor()
-        cursor.execute("select pur_order_id from oc.purchase_order where order_id= '"+self.order_id+"'")
-        po = cursor.fetchall()[0]['pur_order_id']   # 获取PO单号
-        url = 'http://oc-' + self.env + '.ehsy.com/admin/purchaseorder/poChangeNonStopFlag'
-        r = requests.post(url, data={
-            'purOrderId': po, 'nonStopFlag': '1'})
-        result = r.json()
+        """西域确认PO"""
+        vals = {
+            'po': self.po_id
+        }
+        result = self.sock.execute(self.dbname, self.uid, self.pwd, 'used.by.tester', 'test_ehsy_button_approve', vals)
         return result
+
+    # def po_change_to_zhifa(self):
+    #     """PO单非直发转直发"""
+    #     cursor = self.connection.cursor()
+    #     cursor.execute("select pur_order_id from oc.purchase_order where order_id= '"+self.order_id+"'")
+    #     po = cursor.fetchall()[0]['pur_order_id']   # 获取PO单号
+    #     url = 'http://oc-' + self.env + '.ehsy.com/admin/purchaseorder/poChangeNonStopFlag'
+    #     r = requests.post(url, data={
+    #         'purOrderId': po, 'nonStopFlag': '1'})
+    #     result = r.json()
+    #     return result
 
     def po_change_to_feizhifa(self):
         """直发转非直发"""
-        cursor = self.connection.cursor()
-        # 获取PO单号
-        cursor.execute("select pur_order_id from oc.purchase_order where order_id= '" + self.order_id + "'")
-        po = cursor.fetchall()[0]['pur_order_id']
-        url = 'http://oc-' + self.env + '.ehsy.com/admin/purchaseorder/poChangeNonStopFlag'
-        r = requests.post(url, data={
-            'purOrderId': po, 'nonStopFlag': '0', 'warehouseCode': 'C01'})
-        result = r.json()
+        vals = {
+            'po': self.po_id
+        }
+        result = self.sock.execute(self.dbname, self.uid, self.pwd, 'used.by.tester', 'test_action_po_district', vals)
         return result
 
     def supplier_confirm(self):
         """供应商确认"""
-        cursor = self.connection.cursor()
-        cursor.execute("select pur_order_id,supplier_id from oc.purchase_order where order_id= '" + self.order_id + "'")
-        sql_result = cursor.fetchall()
-        po = sql_result[0]['pur_order_id']
-        supplier_id = str(sql_result[0]['supplier_id'])
-        url = 'http://oc-' + self.env + '.ehsy.com/supplier/purchaseorder/confirm'
-        operateData = {
-            'purOrderId': po,
-            'supplierId': supplier_id
+        vals = {
+            'po': self.po_id
         }
-        r = requests.post(url, data={'operateData': json.dumps(operateData)})
-        result = r.json()
+        result = self.sock.execute(self.dbname, self.uid, self.pwd, 'used.by.tester', 'test_button_approve', vals)
+        return result
+
+    def query_po_send_detail(self):
+        """查询PO发货详情"""
+        vals = {
+            'purOrderId': self.po_id
+        }
+        query_result = self.sock.execute(self.dbname, self.uid, self.pwd, 'purchase.order', 'get_po_info_spc', json.dumps(vals))
+        query_result = json.loads(query_result)
+        if query_result['mark'] == '1':
+            result = query_result
+        elif query_result['mark'] == '0':
+            result = {'mark': '0', 'message': 'Success'}
+
+            # 组装采购单详情数据
+            detail = []
+            detail_dic = {}
+            for i in query_result['data']['purchaseOrderUnitList']:
+                detail_dic['sku'] = i['skuCode']
+                detail_dic['qty'] = i['quantity']
+                detail_dic['send_qty'] = i['sendedQuantity']
+                detail.append(detail_dic)
+            result['detail'] = detail
+            print(detail, result)
         return result
 
     def po_send(self):
         """PO发货（全部发货）"""
-        cursor = self.connection.cursor()
-        cursor.execute("select id,pur_order_id,sku_code,quantity,product_name,unit from oc.purchase_order_unit where order_id='"+self.order_id+"'")
-        query_dict1 = cursor.fetchall()
-        cursor.execute("select pur_order_id, supplier_id from oc.purchase_order where order_id='"+self.order_id+"'")
-        query_dict2 = cursor.fetchall()
-        deliveryList = []   # 发货详情参数
-        po_id = query_dict2[0]['pur_order_id']
-        supplier_id = str(query_dict2[0]['supplier_id'])
-        for pu in query_dict1:
-            params = {}
-            params['id'] = pu['id']
-            params['orderId'] = self.order_id
-            params['skuCode'] = pu['sku_code']
-            params['productName'] = pu['product_name']
-            params['sendQuantity'] = str(pu['quantity'])
-            params['unit'] = pu['unit']
-            deliveryList.append(params)
-        url = 'http://oc-' + self.env + '.ehsy.com/supplier/purchaseorder/deliver'
-        operateData = {
-            "purOrderId": po_id,
-            "supplierId": supplier_id,
-            "sendNo": "100023456",
-            "sendCompanyName": "韵达快递",
-            "deliveryList": deliveryList
-        }
-        r = requests.post(url, data={'operateData': json.dumps(operateData)})   # 接口为key:json格式
-        result = r.json()
-        return result
+        sql_result = self.cr.execute("select a.product_uom, a.product_name, a.so_no, a.id, a.partner_id from public.purchase_order_line a where a.order_id='100406'")
+
+        return True
 
     def so_invoice(self):
         """SO开票-Odoo"""

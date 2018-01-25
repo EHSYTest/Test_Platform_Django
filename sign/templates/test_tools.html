@@ -34,8 +34,8 @@
             </td>
            <td><input name="button" type="submit" value="获取Token"></td>
            <td><input name="button" type="submit" value="生成订单"></td>
-        </tr>
-        <tr>
+       </tr>
+       <tr>
             <td class="text-left">SO单号</td>
             <td>
                 <input name="so_value" type="text" value="{{so_value}}">
@@ -49,13 +49,18 @@
                 <input name="button" type="submit" value="确认订单">
             </td>
             <td>
+                <input name="button" type="submit" value="生成发货单">
+            </td>
+            <td>
                 <input name="button" type="submit" value="生成PO">
             </td>
+       <tr>
+            <td class="text-left">PO单号</td>
             <td>
-                <input name="button" type="submit" value="确认PO">
+                <input name="po_value" type="text" value="{{po_value}}">
             </td>
             <td>
-                <input name="button" type="submit" value="非直发转直发">
+                <input name="button" type="submit" value="西域确认PO">
             </td>
             <td>
                 <input name="button" type="submit" value="直发转非直发">
@@ -64,9 +69,49 @@
                 <input name="button" type="submit" value="供应商确认">
             </td>
             <td>
-                <input name="button" type="submit" value="PO发货">
+                <input name="button" type="submit" value="PO查询">
             </td>
         </tr>
+       <tr>
+           <table>
+               <thead>
+                <tr>
+                  <td class="text-left" width="100"><strong>SKU</strong></td>
+                  <td class="text-left " width="100"><strong>采购数量</strong></td>
+                  <td class="text-left" width="100"><strong>已发货数量</strong></td>
+                  <td class="text-left" width="100"><strong>发货数量</strong></td>
+                </tr>
+              </thead>
+                <tbody>
+                {% if detail %}
+                    {%for line in detail%}
+                        <tr>
+                          <td class="text-left" width="100">
+                              <input name="sku" value={{line.sku}} readonly="readonly" >
+                          </td>
+                          <td class="text-left" width="100">
+                              <input name="qty" value="{{line.qty}}" readonly="readonly" >
+                          </td>
+                          <td class="text-left" width="100">
+                              <input name="send_qty" value="{{line.send_qty}}" readonly="readonly" >
+                          </td>
+                          <td class="text-left" width="100">
+                              <input name="pre_send_qty" value="">
+                          </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td style="text-align:right;">
+                                <input name="button" type="submit" value="发货">
+                            </td>
+                        </tr>
+                    {%endfor%}
+                {% endif %}
+              </tbody>
+        </table>
+       </tr>
         <tr>
             <td class="text-left">发票编号</td>
             <td>

@@ -148,80 +148,93 @@ def tools_button(request):
     """测试工具页button对应处理函数"""
     env = request.POST.get('environment')   # 获取选择的测试环境
     so_value = request.POST.get('so_value', '')     # 获取输入的SO单号
+    po_value = request.POST.get('po_value', '')     # 获取输入的PO单号
     num = request.POST.get('invoice_num', '')       # 获取输入的发票编号
-    tt = TestTools(env, so_value, num)   # test_tools模块类实例
     action = request.POST.get('button')     # 从button的value值分析所需要进行的操作
+    if action in ('生成发货单', '生成PO', '西域确认PO', '直发转非直发', '供应商确认', 'PO查询', 'SO开票'):
+        tt = TestTools(env, so_value, num, po_value, odoo_flag=True)   # test_tools模块类实例
+    elif action == '发货':
+        tt = TestTools(env, so_value, num, po_value, odoo_flag=True, odoo_db=True)
+    else:
+        tt = TestTools(env, so_value, num, po_value)
     result = {}
+    other = ''      # 需要在message上显示的附加信息，如：PO单号
     if env == 'staging':
         env_b = 'test'   # env_b标志另一个测试环境（select下拉选项的另一个，为了最终原样返回选择的环境）
     elif env == 'test':
         env_b = 'staging'
+    bring_back_vals = {'so_value': so_value, 'env': env, 'env_b': env_b, 'invoice_value': num, 'po_value': po_value}
     if action == '获取Token':
         result = tt.login()
         request.session['token'] = result['sys']['token']
-    if action == '生成订单': # test_tools模块对应函数
+    if action == '生成订单':    # test_tools模块对应函数
         token = request.session.get('token', '')
         if not token:
             messages.error(request, 'No Token')
-            return render(request, 'test_tools.html', {'so_value': so_value, 'env': env, 'env_b': env_b, 'invoice_value': num})
+            return render(request, 'test_tools.html', bring_back_vals)
         result = tt.create_order(token)
         if result['mark'] == '0':
             messages.success(request, result['data']['orderId'])
-            return render(request, 'test_tools.html', {'so_value': so_value, 'env': env, 'env_b': env_b, 'invoice_value': num})
+            return render(request, 'test_tools.html', bring_back_vals)
         else:
             messages.error(request, result['message'])
-            return render(request, 'test_tools.html', {'so_value': so_value, 'env': env, 'env_b': env_b, 'invoice_value': num})
+            return render(request, 'test_tools.html', bring_back_vals)
     if action == '订单详情':
         token = request.session.get('token', '')
         if not token:
             messages.error(request, 'No Token')
-            return render(request, 'test_tools.html', {'so_value': so_value, 'env': env, 'env_b': env_b, 'invoice_value': num})
+            return render(request, 'test_tools.html', bring_back_vals)
         result = tt.order_detail(token)
         if result['mark'] == '0':
             messages.success(request, result)
-            return render(request, 'test_tools.html', {'so_value': so_value, 'env': env, 'env_b': env_b, 'invoice_value': num})
+            return render(request, 'test_tools.html', bring_back_vals)
         else:
             messages.error(request, result['message'])
-            return render(request, 'test_tools.html',{'so_value': so_value, 'env': env, 'env_b': env_b, 'invoice_value': num})
+            return render(request, 'test_tools.html', bring_back_vals)
     if action == '订单取消':
         # token = request.session.get('token')
         # if not token:
         #     messages.error(request, 'No token')
-        #     return render(request, 'test_tools.html',{'so_value': so_value, 'env': env, 'env_b': env_b, 'invoice_value': num})
+        #     return render(request, 'test_tools.html',bring_back_vals)
         # result = tt.order_cancel(token)
          result = tt.order_cancel()
     if action == '财务收款':
         result = tt.order_payed()
     if action == '确认订单':
         result = tt.order_confirm()
+    if action == '生成发货单':
+        result = tt.create_delivery()
     if action == '生成PO':
         result = tt.create_po()
-    if action == '确认PO':
+    if action == '西域确认PO':
         result = tt.confirm_po()
         messages.success(request, result)
-        return render(request, 'test_tools.html', {'so_value': so_value, 'env': env, 'env_b': env_b, 'invoice_value': num})
-    if action == '非直发转直发':
-        result = tt.po_change_to_zhifa()
+        return render(request, 'test_tools.html', bring_back_vals)
     if action == '直发转非直发':
         result = tt.po_change_to_feizhifa()
     if action == '供应商确认':
         result = tt.supplier_confirm()
-    if action == 'PO发货':
+    if action == 'PO查询':
+        result = tt.query_po_send_detail()
+        bring_back_vals.update({'detail': result['detail']})
+        print(bring_back_vals)
+    if action == '发货':
+        sku = request.POST.get('sku', '')
         result = tt.po_send()
     if action == 'SO开票':
         result = tt.so_invoice()
         if result == 'error':
             messages.error(request, 'Error')
-            return render(request, 'test_tools.html', {'so_value': so_value, 'env': env, 'env_b': env_b, 'invoice_value': num})
+            return render(request, 'test_tools.html', bring_back_vals)
         else:
             messages.success(request, result)
-            return render(request, 'test_tools.html', {'so_value': so_value, 'env': env, 'env_b': env_b, 'invoice_value': num})
+            return render(request, 'test_tools.html', bring_back_vals)
     if result['mark'] == '0':   # 接口返回mark为0表示成功
-        messages.success(request, result['message'])
-        return render(request, 'test_tools.html', {'so_value': so_value, 'env': env, 'env_b': env_b, 'invoice_value': num})
+        messages.success(request, result['message'] + '    ' + other)
+        return render(request, 'test_tools.html', bring_back_vals)
     if result['mark'] != '0':   # 接口返回的mark参数不为'0'则提示错误信息
         messages.error(request, result['message'])
-        return render(request, 'test_tools.html', {'so_value': so_value, 'env': env, 'env_b': env_b, 'invoice_value': num})
+        return render(request, 'test_tools.html', bring_back_vals)
 
 
 
