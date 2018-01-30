@@ -219,8 +219,7 @@ def tools_button(request):
         bring_back_vals.update({'detail': result['detail']})
         print(bring_back_vals)
     if action == '发货':
-        sku = request.POST.get('sku', '')
-        result = tt.po_send()
+        result = tt.po_send(request)
     if action == 'SO开票':
         result = tt.so_invoice()
         if result == 'error':
@@ -235,6 +234,7 @@ def tools_button(request):
     if result['mark'] != '0':   # 接口返回的mark参数不为'0'则提示错误信息
         messages.error(request, result['message'])
         return render(request, 'test_tools.html', bring_back_vals)
+
 
 
 

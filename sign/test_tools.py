@@ -189,40 +189,78 @@ class TestTools(object):
 
             # 组装采购单详情数据
             detail = []
-            detail_dic = {}
             for i in query_result['data']['purchaseOrderUnitList']:
+                detail_dic = {}
                 detail_dic['sku'] = i['skuCode']
                 detail_dic['qty'] = i['quantity']
                 detail_dic['send_qty'] = i['sendedQuantity']
                 detail.append(detail_dic)
             result['detail'] = detail
-            print(detail, result)
         return result
 
-    def po_send(self):
-        """PO发货（全部发货）"""
-        sql_result = self.cr.execute("select a.product_uom, a.product_name, a.so_no, a.id, a.partner_id from public.purchase_order_line a where a.order_id='100406'")
+    def po_send(self, request):
+        """PO发货"""
+        vals = {}
+        sku_list = request.POST.getlist('sku', '')
+        pre_send_qty = request.POST.getlist('pre_send_qty', '')
+        send_no = request.POST.get('send_no', '')
+        send_company = request.POST.get('send_company', '')
+        if not (sku_list and pre_send_qty and send_company):
+            result = {'mark': '1', 'message': '数据填写不完整'}
+            return result
+        if send_company != '自送' and send_no == '':
+            result = {'mark': '1', 'message': '非自送运单号不能为空'}
+            return result
+        self.cr.execute(
+            "select b.guid from public.purchase_order a join res_partner b on a.partner_id=b.id where a.name='" + self.po_id + "'"
+        )
+        info = self.cr.fetchone()
+        vals['purOrderId'] = self.po_id
+        vals['supplierId'] = info[0]
+        vals['sendNo'] = send_no
+        vals['sendCompanyName'] = send_company
 
-        return True
+        deliveryList = []
+        for i in range(len(sku_list)):
+            if pre_send_qty[i]:
+                send_detail = {}
+                send_detail['skuCode'] = sku_list[i]
+                print(sku_list[i])
+                send_detail['sendQuantity'] = int(pre_send_qty[i])
+                self.cr.execute(
+                    "select a.product_uom, a.product_name, a.so_no, a.id, a.partner_id from public.purchase_order_line a where a.order_id=(select id from public.purchase_order where name='" + self.po_id + "') and a.product_code='"+sku_list[i]+"'"
+                )
+                sql_result = self.cr.fetchone()
+                print('sql_result: %s' % sql_result)
+                self.cr.execute(
+                    "select name from public.product_uom where id='"+str(sql_result[0])+"'"
+                )
+                unit = self.cr.fetchone()
+                print('unit: %s' % unit)
+                send_detail['productName'] = sql_result[1]
+                send_detail['unit'] = unit[0]
+                send_detail['orderId'] = sql_result[2]
+                send_detail['id'] = sql_result[3]
+                deliveryList.append(send_detail)
+            else:
+                continue
+        vals['deliveryList'] = deliveryList
+        result = self.sock.execute(self.dbname, self.uid, self.pwd, 'supplier.purchase.order.delivery', 'get_po_delivery', json.dumps(vals))
+        result = json.loads(result)
+        if result['mark'] == '0':
+            result['message'] = 'Success'
+        return result
 
     def so_invoice(self):
         """SO开票-Odoo"""
-        dbname = 'odoo-staging'
-        usr = 'admin'
-        pwd = 'admin'
-        oe_ip = '118.178.133.107:8069'
-
         try:
-            sock_common = client.ServerProxy('http://' + oe_ip + '/xmlrpc/common')
-            uid = sock_common.login(dbname, usr, pwd)
-
-            sock = client.ServerProxy('http://' + oe_ip + '/xmlrpc/object')
-            a = sock.execute(dbname, uid, pwd, 'account.invoice.apply', 'search_read',
+            a = self.sock.execute(self.dbname, self.uid, self.pwd, 'account.invoice.apply', 'search_read',
                              [('num', '=', self.num), ('state', '!=', 'cancel')])
             for i in a:
-                sock.execute(dbname, uid, pwd, 'account.invoice.apply', 'write', i['id'],
+                result = self.sock.execute(self.dbname, self.uid, self.pwd, 'account.invoice.apply', 'write', i['id'],
                              {'state': 'done', 'invoiced_num': '123456789', 'name': '123456789',
-                              'invoiced_date': datetime.datetime.now().strftime('%Y -%m-%d %H:%M:%S')})
+                              'invoiced_date': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')})
+                print(result)
         except Exception:
             return 'error'
         else:

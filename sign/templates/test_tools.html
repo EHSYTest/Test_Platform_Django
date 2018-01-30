@@ -84,30 +84,34 @@
               </thead>
                 <tbody>
                 {% if detail %}
-                    {%for line in detail%}
+                    {%for i in detail%}
                         <tr>
                           <td class="text-left" width="100">
-                              <input name="sku" value={{line.sku}} readonly="readonly" >
+                              <input name="sku" value={{i.sku}} readonly="readonly" >
                           </td>
                           <td class="text-left" width="100">
-                              <input name="qty" value="{{line.qty}}" readonly="readonly" >
+                              <input name="qty" value="{{i.qty}}" readonly="readonly" >
                           </td>
                           <td class="text-left" width="100">
-                              <input name="send_qty" value="{{line.send_qty}}" readonly="readonly" >
+                              <input name="send_qty" value="{{i.send_qty}}" readonly="readonly" >
                           </td>
                           <td class="text-left" width="100">
-                              <input name="pre_send_qty" value="">
+                              <input name="pre_send_qty" value=""
+                              >
                           </td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td style="text-align:right;">
-                                <input name="button" type="submit" value="发货">
-                            </td>
                         </tr>
                     {%endfor%}
+                    <tr>
+                        <td class="text-left" width="100">
+                            <input name="send_company" placeholder="物流公司" value="">
+                        </td>
+                        <td class="text-left" width="100">
+                            <input name="send_no" placeholder="发货单号" value="">
+                        </td>
+                        <td style="text-align:right;">
+                            <input name="button" type="submit" value="发货">
+                        </td>
+                    </tr>
                 {% endif %}
               </tbody>
         </table>
