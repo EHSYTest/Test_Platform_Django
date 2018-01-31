@@ -219,8 +219,6 @@ def tools_button(request):
         result = tt.so_send(request)
     if action == '西域确认PO':
         result = tt.confirm_po()
-        messages.success(request, result)
-        return render(request, 'test_tools.html', bring_back_vals)
     if action == '直发转非直发':
         result = tt.po_change_to_feizhifa()
     if action == '供应商确认':
