@@ -40,7 +40,15 @@ class TestTools(object):
                 self.dbname = 'odoo-staging'
                 self.usr = 'admin'
                 self.pwd = 'admin'
-                self.oe_ip = 'localhost:8069'
+                self.oe_ip = 'odoo-staging.ehsy.com'
+                self.sock_common = client.ServerProxy('http://' + self.oe_ip + '/xmlrpc/common')
+                self.uid = self.sock_common.login(self.dbname, self.usr, self.pwd)
+                self.sock = client.ServerProxy('http://' + self.oe_ip + '/xmlrpc/object')
+            else:
+                self.dbname = 'odoo-test'
+                self.usr = 'admin'
+                self.pwd = 'admin'
+                self.oe_ip = 'odoo-test.ehsy.com'
                 self.sock_common = client.ServerProxy('http://' + self.oe_ip + '/xmlrpc/common')
                 self.uid = self.sock_common.login(self.dbname, self.usr, self.pwd)
                 self.sock = client.ServerProxy('http://' + self.oe_ip + '/xmlrpc/object')
@@ -53,7 +61,15 @@ class TestTools(object):
                     password='openerp2016',
                     database='odoo-staging',
                 )
-                self.cr = self.con.cursor(cursor_factory=psycopg2.extras.DictCursor)
+            else:
+                self.con = psycopg2.connect(
+                    host='118.178.238.29',
+                    port=5432,
+                    user='openerp',
+                    password='ehsy_erp',
+                    database='odoo-test',
+                )
+            self.cr = self.con.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
     def login(self):
         url = 'http://passport-' + self.env + '.ehsy.com/uc/user/login.action'
@@ -205,7 +221,7 @@ class TestTools(object):
         pre_send_qty = request.POST.getlist('pre_send_qty', '')
         send_no = request.POST.get('send_no', '')
         send_company = request.POST.get('send_company', '')
-        if not (sku_list and pre_send_qty and send_company):
+        if not (any(sku_list) and any(pre_send_qty) and send_company):
             result = {'mark': '1', 'message': '数据填写不完整'}
             return result
         if send_company != '自送' and send_no == '':
@@ -215,6 +231,8 @@ class TestTools(object):
             "select b.guid from public.purchase_order a join res_partner b on a.partner_id=b.id where a.name='" + self.po_id + "'"
         )
         info = self.cr.fetchone()
+        if not info:
+            return {'mark': '1', 'message': '找不到对应的PO单号'}
         vals['purOrderId'] = self.po_id
         vals['supplierId'] = info[0]
         vals['sendNo'] = send_no
@@ -262,6 +280,54 @@ class TestTools(object):
                               'invoiced_date': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')})
                 print(result)
         except Exception:
-            return 'error'
+            return 'Error'
         else:
             return 'Success'
+
+    def query_so_send_detail(self):
+        """查询SO发货详情"""
+        self.cr.execute(
+            "select a.product_uom_qty, a.cancel_qty, a.qty_delivered, a.product_id from public.sale_order_line a where a.order_id=(select id from public.sale_order where name='"+self.order_id+"')"
+        )
+        order_line = self.cr.fetchall()
+        if not order_line:
+            return {'mark': '1', 'message': '找不到对应的SO单号'}
+        send_detail = []
+        for i in order_line:
+            sku_detail = {}
+            self.cr.execute(
+                "select default_code from public.product_product where id='"+str(i[3])+"'"
+            )
+            sku = self.cr.fetchone()
+            sku_detail['sku'] = sku[0]
+            sku_detail['k_send_qty'] = str(int(i[0]-i[1]))  # 原数量
+            sku_detail['y_send_qty'] = str(i[2])            # 已发货数量
+            send_detail.append(sku_detail)
+        result = {'mark': '0', 'message': 'Success', 'send_detail': send_detail}
+        return result
+
+    def so_send(self, request):
+        vals = {}
+        sku_list = request.POST.getlist('so_sku', '')
+        send_qty_list = request.POST.getlist('so_send_qty', '')
+        send_no = request.POST.get('so_send_no', '')
+        send_company = request.POST.get('so_send_company', '')
+
+        if not (self.order_id and send_no and any(send_qty_list)):
+            return {'mark': '1', 'message': '数据填写不完整'}
+        vals['so'] = self.order_id
+        vals['batch_flag'] = 'True'
+        vals['send_no'] = send_no
+        # vals['send_company'] = send_company
+        send_detail = []
+        for i in range(len(sku_list)):
+            if send_qty_list[i]:
+                detail = {}
+                detail['sku'] = sku_list[i]
+                detail['send_qty'] = send_qty_list[i]
+                send_detail.append(detail)
+            else:
+                continue
+        vals['send_detail'] = send_detail
+        result = self.sock.execute(self.dbname, self.uid, self.pwd, 'used.by.tester', 'test_so_transfer', vals)
+        return result

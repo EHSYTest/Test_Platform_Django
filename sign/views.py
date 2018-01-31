@@ -153,7 +153,7 @@ def tools_button(request):
     action = request.POST.get('button')     # 从button的value值分析所需要进行的操作
     if action in ('生成发货单', '生成PO', '西域确认PO', '直发转非直发', '供应商确认', 'PO查询', 'SO开票'):
         tt = TestTools(env, so_value, num, po_value, odoo_flag=True)   # test_tools模块类实例
-    elif action == '发货':
+    elif action in ('发货', 'SO查询', 'SO发货'):
         tt = TestTools(env, so_value, num, po_value, odoo_flag=True, odoo_db=True)
     else:
         tt = TestTools(env, so_value, num, po_value)
@@ -186,7 +186,7 @@ def tools_button(request):
             return render(request, 'test_tools.html', bring_back_vals)
         result = tt.order_detail(token)
         if result['mark'] == '0':
-            messages.success(request, result)
+            messages.success(request, json.dumps(result))
             return render(request, 'test_tools.html', bring_back_vals)
         else:
             messages.error(request, result['message'])
@@ -206,6 +206,16 @@ def tools_button(request):
         result = tt.create_delivery()
     if action == '生成PO':
         result = tt.create_po()
+        if result['mark'] == '0':
+            other = result['po']
+    if action == 'SO查询':
+        result = tt.query_so_send_detail()
+        bring_back_vals.update({'so_detail': result['send_detail']})
+        request.session['so_detail'] = result['send_detail']
+    if action == 'SO发货':
+        so_detail = request.session.get('so_detail')
+        bring_back_vals.update({'so_detail': so_detail})
+        result = tt.so_send(request)
     if action == '西域确认PO':
         result = tt.confirm_po()
         messages.success(request, result)
@@ -216,13 +226,16 @@ def tools_button(request):
         result = tt.supplier_confirm()
     if action == 'PO查询':
         result = tt.query_po_send_detail()
-        bring_back_vals.update({'detail': result['detail']})
-        print(bring_back_vals)
-    if action == '发货':
+        bring_back_vals.update({'po_detail': result['detail']})
+        request.session['po_detail'] = result['detail']
+    if action == 'PO发货':
+        po_detail = request.session.get('po_detail')
+        print(po_detail)
         result = tt.po_send(request)
+        bring_back_vals.update({'po_detail': po_detail})
     if action == 'SO开票':
         result = tt.so_invoice()
-        if result == 'error':
+        if result == 'Error':
             messages.error(request, 'Error')
             return render(request, 'test_tools.html', bring_back_vals)
         else:
