@@ -210,8 +210,9 @@ def tools_button(request):
             other = result['po']
     if action == 'SO查询':
         result = tt.query_so_send_detail()
-        bring_back_vals.update({'so_detail': result['send_detail']})
-        request.session['so_detail'] = result['send_detail']
+        if result['mark'] == '0':
+            bring_back_vals.update({'so_detail': result['send_detail']})
+            request.session['so_detail'] = result['send_detail']
     if action == 'SO发货':
         so_detail = request.session.get('so_detail')
         bring_back_vals.update({'so_detail': so_detail})
@@ -226,8 +227,9 @@ def tools_button(request):
         result = tt.supplier_confirm()
     if action == 'PO查询':
         result = tt.query_po_send_detail()
-        bring_back_vals.update({'po_detail': result['detail']})
-        request.session['po_detail'] = result['detail']
+        if result['mark'] == '0':
+            bring_back_vals.update({'po_detail': result['detail']})
+            request.session['po_detail'] = result['detail']
     if action == 'PO发货':
         po_detail = request.session.get('po_detail')
         print(po_detail)
