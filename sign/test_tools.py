@@ -316,7 +316,7 @@ class TestTools(object):
         if not (self.order_id and send_no and any(send_qty_list)):
             return {'mark': '1', 'message': '数据填写不完整'}
         vals['so'] = self.order_id
-        vals['batch_flag'] = 'True'
+        vals['batch_flag'] = 'true'
         vals['send_no'] = send_no
         # vals['send_company'] = send_company
         send_detail = []
@@ -329,5 +329,17 @@ class TestTools(object):
             else:
                 continue
         vals['send_detail'] = send_detail
+        result = self.sock.execute(self.dbname, self.uid, self.pwd, 'used.by.tester', 'test_so_transfer', vals)
+        return result
+
+    def so_send_all(self, request):
+        vals = {}
+        send_no = request.POST.get('so_send_no', '')
+
+        if not (self.order_id and send_no):
+            return {'mark': '1', 'message': '数据填写不完整'}
+        vals['so'] = self.order_id
+        vals['batch_flag'] = 'false'
+        vals['send_no'] = send_no
         result = self.sock.execute(self.dbname, self.uid, self.pwd, 'used.by.tester', 'test_so_transfer', vals)
         return result
