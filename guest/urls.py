@@ -22,6 +22,7 @@ from django.conf import settings
 
 
 urlpatterns = [
+    url(r'^$', views.test_tools),
     url(r'^admin/', admin.site.urls),
     url(r'^index', views.index),
     url(r'^batch_test', views.batch_test),
