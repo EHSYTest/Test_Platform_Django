@@ -151,7 +151,7 @@ def tools_button(request):
     po_value = request.POST.get('po_value', '')     # 获取输入的PO单号
     num = request.POST.get('invoice_num', '')       # 获取输入的发票编号
     action = request.POST.get('button')     # 从button的value值分析所需要进行的操作
-    if action in ('生成发货单', '生成PO', '西域确认PO', '直发转非直发', '供应商确认', 'PO查询', 'SO开票', 'SO全部发货'):
+    if action in ('生成发货单', '生成PO', '西域确认PO', '直发转非直发', '供应商确认', 'PO查询', 'SO开票', 'SO全部发货', '查询', '更新'):
         tt = TestTools(env, so_value, num, po_value, odoo_flag=True)   # test_tools模块类实例
     elif action in ('发货', 'SO查询', 'SO发货'):
         tt = TestTools(env, so_value, num, po_value, odoo_flag=True, odoo_db=True)
@@ -245,6 +245,14 @@ def tools_button(request):
         else:
             messages.success(request, result)
             return render(request, 'test_tools.html', bring_back_vals)
+    if action == '查询':
+        result = tt.query_stock(request)
+        sku_stock = request.POST.get('sku_stock', '')
+        bring_back_vals.update({'qty_stock': result['qty'], 'sku_stock': sku_stock})
+    if action == '更新':
+        result = tt.update_stock(request)
+        sku_stock = request.POST.get('sku_stock', '')
+        bring_back_vals.update({'sku_stock': sku_stock})
     if result['mark'] == '0':   # 接口返回mark为0表示成功
         messages.success(request, result['message'] + '    ' + other)
         return render(request, 'test_tools.html', bring_back_vals)

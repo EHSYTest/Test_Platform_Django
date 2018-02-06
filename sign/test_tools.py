@@ -41,6 +41,7 @@ class TestTools(object):
                 self.usr = 'admin'
                 self.pwd = 'admin'
                 self.oe_ip = 'odoo-staging.ehsy.com'
+                # self.oe_ip = 'localhost:8069'
                 self.sock_common = client.ServerProxy('http://' + self.oe_ip + '/xmlrpc/common')
                 self.uid = self.sock_common.login(self.dbname, self.usr, self.pwd)
                 self.sock = client.ServerProxy('http://' + self.oe_ip + '/xmlrpc/object')
@@ -342,4 +343,23 @@ class TestTools(object):
         vals['batch_flag'] = 'false'
         vals['send_no'] = send_no
         result = self.sock.execute(self.dbname, self.uid, self.pwd, 'used.by.tester', 'test_so_transfer', vals)
+        return result
+
+    def query_stock(self, request):
+        sku = request.POST.get('sku_stock', '')
+        if not sku:
+            return {'mark': '1', 'message': 'SKU不能为空'}
+        vals = {'product': sku}
+        result = self.sock.execute(self.dbname, self.uid, self.pwd, 'used.by.tester', 'query_product_qty', vals)
+        return result
+
+    def update_stock(self, request):
+        sku = request.POST.get('sku_stock', '')
+        update_qty = request.POST.get('qty_stock', '')
+        if not sku:
+            return {'mark': '1', 'message': 'SKU不能为空'}
+        if not update_qty:
+            return {'mark': '1', 'message': '更新数量不能为空'}
+        vals = {'product': sku, 'update_qty': update_qty}
+        result = self.sock.execute(self.dbname, self.uid, self.pwd, 'used.by.tester', 'update_product_qty', vals)
         return result

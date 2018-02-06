@@ -186,6 +186,18 @@
                 </td>
             </tr>
         </div>
+
+        <div>
+            <tr>
+                <td>Odoo库存</td>
+            </tr>
+            <tr>
+                <input name="sku_stock" type="text" value="{{sku_stock}}" placeholder="SKU">
+                <input name="qty_stock" value="{{qty_stock}}" placeholder="数量">
+                <input name="button" type="submit" value="查询">
+                <input name="button" type="submit" value="更新">
+            </tr>
+        </div>
     </form>
 
 {% endblock %}
