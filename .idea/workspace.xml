@@ -35,8 +35,8 @@
       <file leaf-file-name="test_tools.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/sign/templates/test_tools.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="223">
-              <caret line="198" column="21" lean-forward="true" selection-start-line="198" selection-start-column="21" selection-end-line="198" selection-end-column="21" />
+            <state relative-caret-position="243">
+              <caret line="199" column="21" lean-forward="true" selection-start-line="199" selection-start-column="21" selection-end-line="199" selection-end-column="21" />
               <folding>
                 <element signature="e#172#178#0" expanded="true" />
                 <element signature="e#178#184#0" expanded="true" />
@@ -60,28 +60,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="test.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/sign/templates/test.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="600">
-              <caret line="30" column="32" lean-forward="false" selection-start-line="30" selection-start-column="32" selection-end-line="30" selection-end-column="32" />
-              <folding>
-                <element signature="e#172#178#0" expanded="true" />
-                <element signature="e#178#184#0" expanded="true" />
-                <element signature="e#184#190#0" expanded="true" />
-                <element signature="e#190#196#0" expanded="true" />
-                <element signature="n#style#0;n#td#3;n#tr#1;n#tbody#0;n#table#0;n#tr#2;n#div#0;n#form#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#td#2;n#tr#1;n#tbody#0;n#table#0;n#div#0;n#div#0;n#form#0;n#!!top" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/sign/views.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="181">
-              <caret line="250" column="29" lean-forward="true" selection-start-line="250" selection-start-column="29" selection-end-line="250" selection-end-column="29" />
+              <caret line="254" column="30" lean-forward="false" selection-start-line="254" selection-start-column="30" selection-end-line="254" selection-end-column="30" />
               <folding>
                 <element signature="e#15#50#0" expanded="true" />
               </folding>
@@ -92,8 +75,8 @@
       <file leaf-file-name="test_tools.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/sign/test_tools.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="43" column="46" lean-forward="false" selection-start-line="43" selection-start-column="46" selection-end-line="43" selection-end-column="46" />
+            <state relative-caret-position="205">
+              <caret line="42" column="52" lean-forward="true" selection-start-line="42" selection-start-column="52" selection-end-line="42" selection-end-column="52" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
@@ -718,7 +701,14 @@
       <option name="project" value="LOCAL" />
       <updated>1517904102912</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="New">
+      <created>1517988886228</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1517988886228</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TodoView">
@@ -923,21 +913,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sign/templates/test.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="600">
-          <caret line="30" column="32" lean-forward="false" selection-start-line="30" selection-start-column="32" selection-end-line="30" selection-end-column="32" />
-          <folding>
-            <element signature="e#172#178#0" expanded="true" />
-            <element signature="e#178#184#0" expanded="true" />
-            <element signature="e#184#190#0" expanded="true" />
-            <element signature="e#190#196#0" expanded="true" />
-            <element signature="n#style#0;n#td#3;n#tr#1;n#tbody#0;n#table#0;n#tr#2;n#div#0;n#form#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#2;n#tr#1;n#tbody#0;n#table#0;n#div#0;n#div#0;n#form#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/sign/templates/api_detail.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="860">
@@ -966,8 +941,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/sign/templates/test_tools.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="223">
-          <caret line="198" column="21" lean-forward="true" selection-start-line="198" selection-start-column="21" selection-end-line="198" selection-end-column="21" />
+        <state relative-caret-position="243">
+          <caret line="199" column="21" lean-forward="true" selection-start-line="199" selection-start-column="21" selection-end-line="199" selection-end-column="21" />
           <folding>
             <element signature="e#172#178#0" expanded="true" />
             <element signature="e#178#184#0" expanded="true" />
@@ -980,10 +955,25 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/sign/templates/test.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="343">
+          <caret line="30" column="32" lean-forward="false" selection-start-line="30" selection-start-column="32" selection-end-line="30" selection-end-column="32" />
+          <folding>
+            <element signature="e#172#178#0" expanded="false" />
+            <element signature="e#178#184#0" expanded="false" />
+            <element signature="e#184#190#0" expanded="false" />
+            <element signature="e#190#196#0" expanded="false" />
+            <element signature="n#style#0;n#td#3;n#tr#1;n#tbody#0;n#table#0;n#tr#2;n#div#0;n#form#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#td#2;n#tr#1;n#tbody#0;n#table#0;n#div#0;n#div#0;n#form#0;n#!!top" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/sign/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="181">
-          <caret line="250" column="29" lean-forward="true" selection-start-line="250" selection-start-column="29" selection-end-line="250" selection-end-column="29" />
+          <caret line="254" column="30" lean-forward="false" selection-start-line="254" selection-start-column="30" selection-end-line="254" selection-end-column="30" />
           <folding>
             <element signature="e#15#50#0" expanded="true" />
           </folding>
@@ -992,8 +982,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/sign/test_tools.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="43" column="46" lean-forward="false" selection-start-line="43" selection-start-column="46" selection-end-line="43" selection-end-column="46" />
+        <state relative-caret-position="205">
+          <caret line="42" column="52" lean-forward="true" selection-start-line="42" selection-start-column="52" selection-end-line="42" selection-end-column="52" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
           </folding>

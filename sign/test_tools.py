@@ -379,3 +379,11 @@ class TestTools(object):
         vals = {'cs_no': cs_no}
         result = self.sock.execute(self.dbname, self.uid, self.pwd, 'used.by.tester', 'after_sale_done', vals)
         return result
+
+    def after_sale_refuse(self, request):
+        cs_no = request.POST.get('cs_no', '')
+        if not cs_no:
+            return {'mark': '1', 'message': 'CS_No不能为空'}
+        vals = {'cs_no': cs_no}
+        result = self.sock.execute(self.dbname, self.uid, self.pwd, 'used.by.tester', 'after_sale_refuse', vals)
+        return result

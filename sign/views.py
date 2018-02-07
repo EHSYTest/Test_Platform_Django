@@ -151,7 +151,7 @@ def tools_button(request):
     po_value = request.POST.get('po_value', '')     # 获取输入的PO单号
     num = request.POST.get('invoice_num', '')       # 获取输入的发票编号
     action = request.POST.get('button')     # 从button的value值分析所需要进行的操作
-    if action in ('生成发货单', '生成PO', '西域确认PO', '直发转非直发', '供应商确认', 'PO查询', 'SO开票', 'SO全部发货', '查询', '更新', '售后确认', '售后完结'):
+    if action in ('生成发货单', '生成PO', '西域确认PO', '直发转非直发', '供应商确认', 'PO查询', 'SO开票', 'SO全部发货', '查询', '更新', '售后确认', '售后完结', '售后作废'):
         tt = TestTools(env, so_value, num, po_value, odoo_flag=True)   # test_tools模块类实例
     elif action in ('发货', 'SO查询', 'SO发货'):
         tt = TestTools(env, so_value, num, po_value, odoo_flag=True, odoo_db=True)
@@ -253,6 +253,10 @@ def tools_button(request):
         cs_no = request.POST.get('cs_no', '')
         bring_back_vals.update({'cs_no': cs_no})
         result = tt.after_sale_done(request)
+    if action == '售后作废':
+        cs_no = request.POST.get('cs_no', '')
+        bring_back_vals.update({'cs_no': cs_no})
+        result = tt.after_sale_refuse(request)
     if action == '查询':
         result = tt.query_stock(request)
         sku_stock = request.POST.get('sku_stock', '')
