@@ -363,3 +363,19 @@ class TestTools(object):
         vals = {'product': sku, 'update_qty': update_qty}
         result = self.sock.execute(self.dbname, self.uid, self.pwd, 'used.by.tester', 'update_product_qty', vals)
         return result
+
+    def after_sale_confirm(self, request):
+        cs_no = request.POST.get('cs_no', '')
+        if not cs_no:
+            return {'mark': '1', 'message': 'CS_No不能为空'}
+        vals = {'cs_no': cs_no}
+        result = self.sock.execute(self.dbname, self.uid, self.pwd, 'used.by.tester', 'after_sale_confirm', vals)
+        return result
+
+    def after_sale_done(self, request):
+        cs_no = request.POST.get('cs_no', '')
+        if not cs_no:
+            return {'mark': '1', 'message': 'CS_No不能为空'}
+        vals = {'cs_no': cs_no}
+        result = self.sock.execute(self.dbname, self.uid, self.pwd, 'used.by.tester', 'after_sale_done', vals)
+        return result
