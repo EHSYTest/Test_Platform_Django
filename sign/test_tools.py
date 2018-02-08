@@ -73,9 +73,8 @@ class TestTools(object):
             self.cr = self.con.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
     def login(self):
-        url = 'http://passport-' + self.env + '.ehsy.com/uc/user/login.action'
-        data = {'login_name': '18751551645', 'login_password': '111qqq', 'terminal_type': 'pc',
-                'isRememberCount': 'false'}
+        url = 'http://uc-' + self.env + '.ehsy.com/user/login.action'
+        data = {'login_name': '18751551645', 'login_password': '111qqq', 'terminal_type': 'pc'}
         r = requests.post(url, data=data)
         result = r.json()
         token = result['sys']['token']

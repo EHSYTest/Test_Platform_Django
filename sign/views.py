@@ -19,7 +19,7 @@ def api_detail(request):
     loc_start = url.rindex('_')+1    # 从url中获取接口ID的索引位置
     id = url[loc_start:]            # 获取接口ID
     api = apis.objects.get(id=id)   #获取单个对象，通过id值获取数据行
-    params_list = (api.params.strip()).split(',')   # 将数据库中params字段值拆分成列表，在HTML上打印出来
+    params_list = (api.params.strip()).split(',')   # 将数据库中params字段值拆分成列表，在HTML上打印出来,.strip()移除首位字符，默认空格
     return render(request, 'api_detail.html', {'api': api, 'params': params_list})
 
 
