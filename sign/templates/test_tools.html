@@ -41,6 +41,9 @@
             </tr>
         </div>
 
+        <h2>
+            销售流程
+        </h2>
         <div>
             <tr>
                 <td class="text-left">SO单号</td>
@@ -59,14 +62,21 @@
                     <input name="button" type="submit" value="生成发货单">
                 </td>
                 <td>
-                    <input name="button" type="submit" value="生成PO">
-                </td>
-                <td>
                     <input name="button" type="submit" value="SO查询">
                 </td>
             </tr>
         </div>
-
+                <div>
+            <tr>
+                <td class="text-left">发票编号</td>
+                <td class="text-left" width="100">
+                    <input name="invoice_num" type="text" value="{{invoice_value}}" placeholder="KS开头编号">
+                </td>
+                <td class="text-left" width="100">
+                    <input name="button" type="submit" value="SO开票">
+                </td>
+            </tr>
+        </div>
     {% if so_detail %}
         <div>
             <table>
@@ -112,10 +122,16 @@
         </div>
     {% endif %}
 
+        <h2>
+            采购流程
+        </h2>
         <div>
             <td class="text-left">PO单号</td>
             <td>
                 <input name="po_value" type="text" value="{{po_value}}">
+            </td>
+            <td>
+                <input name="button" type="submit" value="生成PO">
             </td>
             <td>
                 <input name="button" type="submit" value="西域确认PO">
@@ -175,18 +191,10 @@
             </table>
         </div>
     {% endif %}
-        <div>
-            <tr>
-                <td class="text-left">发票编号</td>
-                <td class="text-left" width="100">
-                    <input name="invoice_num" type="text" value="{{invoice_value}}">
-                </td>
-                <td class="text-left" width="100">
-                    <input name="button" type="submit" value="SO开票">
-                </td>
-            </tr>
-        </div>
 
+        <h2>
+            销售售后流程
+        </h2>
         <div>
             <tr>
                 <td class="text-left">售后单号</td>
@@ -201,6 +209,9 @@
             </tr>
         </div>
 
+        <h2>
+            查询/更新ODOO库存
+        </h2>
         <div>
             <tr>
                 <td>Odoo库存</td>
