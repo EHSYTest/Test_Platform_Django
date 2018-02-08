@@ -386,3 +386,19 @@ class TestTools(object):
         vals = {'cs_no': cs_no}
         result = self.sock.execute(self.dbname, self.uid, self.pwd, 'used.by.tester', 'after_sale_refuse', vals)
         return result
+
+    def query_so_no(self, request):
+        ex_no = request.POST.get('ex_no', '')
+        if not ex_no:
+            return {'mark': '1', 'message': '外部订单号不能为空！'}
+        cr = self.connection.cursor()
+        cr.execute(
+            "select a.order_id from oc.order_info a where a.EXTERNAL_ORDER_NO ='"+ex_no+"'"
+        )
+        cr_r = cr.fetchone()
+        print(cr_r)
+        if not cr_r:
+            return {'mark': '1', 'message': '没有找到对应订单！'}
+        result = {'mark': '0', 'message': '查询成功！ SO单号：'+cr_r['order_id']}
+        result.update(cr_r)
+        return result

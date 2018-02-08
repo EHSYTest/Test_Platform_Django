@@ -155,6 +155,8 @@ def tools_button(request):
         tt = TestTools(env, so_value, num, po_value, odoo_flag=True)   # test_tools模块类实例
     elif action in ('发货', 'SO查询', 'SO发货'):
         tt = TestTools(env, so_value, num, po_value, odoo_flag=True, odoo_db=True)
+    elif action in ('SO单号查询', ):
+        tt = TestTools(env, so_value, num, po_value, oc_db=True)
     else:
         tt = TestTools(env, so_value, num, po_value)
     result = {}
@@ -179,6 +181,10 @@ def tools_button(request):
         else:
             messages.error(request, result['message'])
             return render(request, 'test_tools.html', bring_back_vals)
+    if action == 'SO单号查询':
+        ex_no = request.POST.get('ex_no', '')
+        result = tt.query_so_no(request)
+        bring_back_vals.update({'ex_no': ex_no})
     if action == '订单详情':
         token = request.session.get('token', '')
         if not token:
