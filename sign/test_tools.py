@@ -148,10 +148,13 @@ class TestTools(object):
         result = self.sock.execute(self.dbname, self.uid, self.pwd, 'used.by.tester', 'test_button_create_delivery', vals)
         return result
 
-    def create_po(self):
+    def create_po(self, request):
         """创建PO"""
+        so = request.POST.get('so_po_value', '')
+        if not so:
+            return {'mark': '1', 'message': '请输入SO单号！'}
         vals = {
-            'so': self.order_id
+            'so': so
         }
         result = self.sock.execute(self.dbname, self.uid, self.pwd, 'used.by.tester', 'test_create_po', vals)
         return result

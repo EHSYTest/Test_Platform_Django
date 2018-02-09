@@ -211,7 +211,9 @@ def tools_button(request):
     if action == '生成发货单':
         result = tt.create_delivery()
     if action == '生成PO':
-        result = tt.create_po()
+        so = request.POST.get('so_po_value', '')
+        bring_back_vals.update({'so_po_value': so})
+        result = tt.create_po(request)
         if result['mark'] == '0':
             other = result['po']
     if action == 'SO查询':
