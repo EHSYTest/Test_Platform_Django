@@ -247,12 +247,6 @@ def tools_button(request):
         bring_back_vals.update({'po_detail': po_detail})
     if action == 'SO开票':
         result = tt.so_invoice()
-        if result == 'Error':
-            messages.error(request, 'Error')
-            return render(request, 'test_tools.html', bring_back_vals)
-        else:
-            messages.success(request, result)
-            return render(request, 'test_tools.html', bring_back_vals)
     if action == '售后确认':
         cs_no = request.POST.get('cs_no', '')
         bring_back_vals.update({'cs_no': cs_no})

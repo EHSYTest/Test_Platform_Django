@@ -11,7 +11,7 @@ class apis(models.Model):
     address = models.URLField('URL', max_length=100)
     name = models.CharField('接口名称', max_length=20)
     method = models.CharField(max_length=10, choices=(('POST','POST'), ('GET', 'GET')), default='POST')
-    params = models.TextField(max_length=500)
+    params = models.TextField(max_length=5000)
     create_time = models.DateTimeField('创建时间', auto_now=True)
     status = models.BooleanField('状态')
 

@@ -12,7 +12,7 @@ class TestTools(object):
     def __init__(self, env, order_id, num, po_id, oc_db=False, odoo_flag=False, odoo_db=False):
         self.env = env       # 测试环境标志： 1 - staging； 0 - test
         self.order_id = order_id        # 传入的SO编号
-        self.num = num      # 传入的发票编
+        self.num = num      # 传入的发票编号
         self.po_id = po_id
         if oc_db:
             if self.env == 'staging':
@@ -274,18 +274,14 @@ class TestTools(object):
 
     def so_invoice(self):
         """SO开票-Odoo"""
+        if not self.num:
+            return {'mark': '1', 'message': '发票编号不能为空！'}
+        vals = {'ks_no': self.num}
         try:
-            a = self.sock.execute(self.dbname, self.uid, self.pwd, 'account.invoice.apply', 'search_read',
-                             [('num', '=', self.num), ('state', '!=', 'cancel')])
-            for i in a:
-                result = self.sock.execute(self.dbname, self.uid, self.pwd, 'account.invoice.apply', 'write', i['id'],
-                             {'state': 'done', 'invoiced_num': '123456789', 'name': '123456789',
-                              'invoiced_date': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')})
-                print(result)
+            result = self.sock.execute(self.dbname, self.uid, self.pwd, 'used.by.tester', 'so_invoice', vals)
         except Exception:
-            return 'Error'
-        else:
-            return 'Success'
+            result = {'mark': '1', 'message': '接口调用异常'}
+        return result
 
     def query_so_send_detail(self):
         """查询SO发货详情"""
