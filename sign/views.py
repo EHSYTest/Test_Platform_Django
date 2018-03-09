@@ -262,7 +262,8 @@ def tools_button(request):
     if action == '查询':
         result = tt.query_stock(request)
         sku_stock = request.POST.get('sku_stock', '')
-        bring_back_vals.update({'qty_stock': result['qty'], 'sku_stock': sku_stock})
+        if result['mark'] == '0':
+            bring_back_vals.update({'qty_stock': result['qty'], 'sku_stock': sku_stock})
     if action == '更新':
         result = tt.update_stock(request)
         sku_stock = request.POST.get('sku_stock', '')
