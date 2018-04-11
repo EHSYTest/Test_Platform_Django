@@ -150,22 +150,25 @@ def tools_button(request):
     so_value = request.POST.get('so_value', '')     # 获取输入的SO单号
     po_value = request.POST.get('po_value', '')     # 获取输入的PO单号
     num = request.POST.get('invoice_num', '')       # 获取输入的发票编号
+    order_sku = request.POST.getlist('order_sku', '')    # 获取输入的sku
+    order_sku_quantity = request.POST.getlist('order_sku_quantity', '')     # 获取输入的sku数量
+    # print(order_sku, order_sku_quantity)
     action = request.POST.get('button')     # 从button的value值分析所需要进行的操作
     if action in ('生成发货单', '生成PO', '西域确认PO', '直发转非直发', '供应商确认', 'PO查询', 'SO开票', 'SO全部发货', '查询', '更新', '售后确认', '售后完结', '售后作废'):
-        tt = TestTools(env, so_value, num, po_value, odoo_flag=True)   # test_tools模块类实例
+        tt = TestTools(env, so_value, num, po_value, order_sku, order_sku_quantity, odoo_flag=True)   # test_tools模块类实例
     elif action in ('发货', 'SO查询', 'SO发货'):
-        tt = TestTools(env, so_value, num, po_value, odoo_flag=True, odoo_db=True)
+        tt = TestTools(env, so_value, num, po_value, order_sku, order_sku_quantity, odoo_flag=True, odoo_db=True)
     elif action in ('SO单号查询', ):
-        tt = TestTools(env, so_value, num, po_value, oc_db=True)
+        tt = TestTools(env, so_value, num, po_value, order_sku, order_sku_quantity, oc_db=True)
     else:
-        tt = TestTools(env, so_value, num, po_value)
+        tt = TestTools(env, so_value, num, po_value, order_sku, order_sku_quantity)
     result = {}
     other = ''      # 需要在message上显示的附加信息，如：PO单号
     if env == 'staging':
         env_b = 'test'   # env_b标志另一个测试环境（select下拉选项的另一个，为了最终原样返回选择的环境）
     elif env == 'test':
         env_b = 'staging'
-    bring_back_vals = {'so_value': so_value, 'env': env, 'env_b': env_b, 'invoice_value': num, 'po_value': po_value}
+    bring_back_vals = {'so_value': so_value, 'env': env, 'env_b': env_b, 'invoice_value': num, 'po_value': po_value, 'order_sku' : order_sku, 'order_sku_quantity' : order_sku_quantity}
     if action == '获取Token':
         result = tt.login()
         request.session['token'] = result['sys']['token']

@@ -9,11 +9,13 @@ from xmlrpc import client
 
 
 class TestTools(object):
-    def __init__(self, env, order_id, num, po_id, oc_db=False, odoo_flag=False, odoo_db=False):
+    def __init__(self, env, order_id, num, po_id, order_sku, order_sku_quantity, oc_db=False, odoo_flag=False, odoo_db=False):
         self.env = env       # 测试环境标志： 1 - staging； 0 - test
         self.order_id = order_id        # 传入的SO编号
         self.num = num      # 传入的发票编号
         self.po_id = po_id
+        self.order_sku = order_sku  #传入的sku
+        self.order_sku_quantity = order_sku_quantity   #传入的sku数量
         if oc_db:
             if self.env == 'staging':
                 # 连接staging——OC数据库
@@ -74,9 +76,10 @@ class TestTools(object):
 
     def login(self):
         url = 'http://uc-' + self.env + '.ehsy.com/user/login.action'
-        data = {'login_name': '18751551645', 'login_password': '111qqq', 'terminal_type': 'pc'}
+        data = {'login_name': '特定用户-不要随意使用', 'login_password': '111qqq', 'terminal_type': 'pc'}
         r = requests.post(url, data=data)
         result = r.json()
+        print(result)
         token = result['sys']['token']
         print(token)
         return result
@@ -84,10 +87,18 @@ class TestTools(object):
     def create_order(self, token):
         """生成订单"""
         url1 = 'http://oc-' + self.env + '.ehsy.com/cart/add'
-        data1 = [{'skuCode':'MVX456','quantity':'2'}, {'skuCode':'MAB243','quantity':'2'}]
-        data = {'token': token, 'data': data1}
+        # print(self.order_sku, self.order_sku_quantity)
+        if self.order_sku[0] == '':
+            data1 = [{'skuCode': self.order_sku[1], 'quantity': self.order_sku_quantity[1]}]
+        elif self.order_sku[1] == '':
+            data1 = [{'skuCode': self.order_sku[0], 'quantity': self.order_sku_quantity[0]}]
+        else:
+            data1 = [{'skuCode':self.order_sku[0], 'quantity':self.order_sku_quantity[0]}, {'skuCode':self.order_sku[1], 'quantity':self.order_sku_quantity[1]}]
+        # print(data1)
+        data = {'token': token, 'data' : data1}
         r1 = requests.post(url1, json=data)
         result1 = r1.json()
+        # print(result1)
         url2 = 'http://oc-' + self.env + '.ehsy.com/order/createOrderNew'
         addedInvoices = [{"bank": "招商银行", "bankAccount": "2343345466", "hasAdminAuth": "0", "invoiceId": "10008247487",
                          'isDefault': "0",  "regAdd": "金科路1122号", "regTel": "18751551645", "selected": 'true',"subType":'',

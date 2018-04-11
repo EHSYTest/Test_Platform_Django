@@ -1,3 +1,4 @@
+#-*-coding: UTF-8-*-
 """
 Django settings for guest project.
 
@@ -78,6 +79,12 @@ WSGI_APPLICATION = 'guest.wsgi.application'
 
 DATABASES = {
     'default': {
+        # 'ENGINE': 'django.db.backends.mysql',    #或者使用mysql.connector.django
+        # 'NAME': 'vivien_django',
+        # 'USER': 'vivien',
+        # 'PASSWORD': 'vivien',
+        # 'HOST': 'localhost',
+        # 'PORT': '3306',
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'rick_django',
         'USER': 'django',
