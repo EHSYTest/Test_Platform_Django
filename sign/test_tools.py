@@ -42,8 +42,8 @@ class TestTools(object):
                 self.dbname = 'odoo-staging'
                 self.usr = 'admin'
                 self.pwd = 'admin'
-                # self.oe_ip = 'odoo-staging.ehsy.com'
-                self.oe_ip = 'localhost:8069'
+                self.oe_ip = 'odoo-staging.ehsy.com'
+                # self.oe_ip = 'localhost:8069'
                 self.sock_common = client.ServerProxy('http://' + self.oe_ip + '/xmlrpc/common')
                 self.uid = self.sock_common.login(self.dbname, self.usr, self.pwd)
                 self.sock = client.ServerProxy('http://' + self.oe_ip + '/xmlrpc/object')
