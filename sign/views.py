@@ -1,4 +1,3 @@
-# coding:utf-8
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from sign.models import apis
@@ -8,18 +7,20 @@ from django.contrib import messages
 from sign.test_tools import TestTools
 import datetime
 
+
 def index(request):
     """index首页"""
     api_list = apis.objects.all()  # 通过objects这个模型管理器的all()获得apis表中所有数据行，相当于SQL中的SELECT * FROM
-    return render(request, 'index.html', {'api_list': api_list}) #返回获取的数据行
+    return render(request, 'index.html', {'api_list': api_list})    # 返回获取的数据行
+
 
 def api_detail(request):
     """接口详情页"""
     url = request.path   # 获取当前地址url
     loc_start = url.rindex('_')+1    # 从url中获取接口ID的索引位置
     id = url[loc_start:]            # 获取接口ID
-    api = apis.objects.get(id=id)   #获取单个对象，通过id值获取数据行
-    params_list = (api.params.strip()).split(',')   # 将数据库中params字段值拆分成列表，在HTML上打印出来,.strip()移除首位字符，默认空格
+    api = apis.objects.get(id=id)   # 获取单个对象，通过id值获取数据行
+    params_list = (api.params.strip()).split(',')   # 将数据库中params字段值拆分成列表，在HTML上打印出来,.strip()移除首末位字符，默认空格
     return render(request, 'api_detail.html', {'api': api, 'params': params_list})
 
 
@@ -201,12 +202,7 @@ def tools_button(request):
             messages.error(request, result['message'])
             return render(request, 'test_tools.html', bring_back_vals)
     if action == '订单取消':
-        # token = request.session.get('token')
-        # if not token:
-        #     messages.error(request, 'No token')
-        #     return render(request, 'test_tools.html',bring_back_vals)
-        # result = tt.order_cancel(token)
-         result = tt.order_cancel()
+        result = tt.order_cancel()
     if action == '财务收款':
         result = tt.order_payed()
     if action == '确认订单':
