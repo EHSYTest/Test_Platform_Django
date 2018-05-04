@@ -232,6 +232,55 @@
         </h2>
         <div>
             <tr>
+                <td class="text_left">售后类型</td>
+                <select name="cs_type">
+                    {% if cs_type %}
+                        <option value="{{cs_type}}">{{cs_type}}</option>
+                        <option value="请选择">请选择</option>
+                        <option value="{{cs_type_other}}">{{cs_type_other}}</option>
+                    {% else %}
+                        <option value="请选择">请选择</option>
+                        <option value="取消">取消</option>
+                        <option value="退货">退货</option>
+                    {% endif %}
+                </select>
+            </tr>
+        </div>
+        <div>
+            <tr>
+                <td class="text_left">SO单号</td>
+                <td><input name="so_cs_value" type="text" value="{{so_cs}}"></td>
+                <td><input name="button" type="submit" value="SO售后申请查询"></td>
+            </tr>
+        </div>
+        {{available_cs_detail}}
+        {% if available_cs_detail %}
+        <div>
+            <table>
+                <thead>
+                <tr>
+                    <td class="text_left"><strong>SKU</strong></td>
+                    <td class="text_left"><strong>允许申请的数量</strong></td>
+                    <td class="text_left"><strong>处理数量</strong></td>
+                </tr>
+                </thead>
+                <tbody>
+                {% for i in available_cs_detail %}
+                {{i}}
+                    <tr>
+                        <td><input name="order_available_sku" type="text" value="{{i.sku_code}}"></td>
+                        <td><input name="sku_available_handle" type="text" value="{{i.avaliable_cancle_num}}"></td>
+                        <td><input name="sku_handle_num" type="text"></td>
+                    </tr>
+                {% endfor %}
+                <td><input name="button" type="submit" value="提交售后申请单"></td>
+                </tbody>
+
+            </table>
+        </div>
+        {% endif %}
+        <div>
+            <tr>
                 <td class="text-left">售后单号</td>
                 <td class="text-left" width="100">
                     <input name="cs_no" type="text" value="{{cs_no}}">

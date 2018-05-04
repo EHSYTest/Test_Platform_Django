@@ -9,13 +9,15 @@ from xmlrpc import client
 
 
 class TestTools(object):
-    def __init__(self, env, order_id, num, po_id, order_sku, order_sku_quantity, oc_db=False, odoo_flag=False, odoo_db=False):
+    def __init__(self, env, order_id, num, po_id, order_sku, order_sku_quantity, so_cs, cs_type, oc_db=False, odoo_flag=False, odoo_db=False):
         self.env = env       # 测试环境标志： 1 - staging； 0 - test
         self.order_id = order_id        # 传入的SO编号
         self.num = num      # 传入的发票编号
         self.po_id = po_id
         self.order_sku = order_sku  #传入的sku
         self.order_sku_quantity = order_sku_quantity   #传入的sku数量
+        self.so_cs = so_cs     #申请售后的订单
+        self.cs_type = cs_type    #申请售后的类型
         if oc_db:
             if self.env == 'staging':
                 # 连接staging——OC数据库
@@ -79,9 +81,9 @@ class TestTools(object):
         data = {'login_name': '特定用户-不要随意使用', 'login_password': '111qqq', 'terminal_type': 'pc'}
         r = requests.post(url, data=data)
         result = r.json()
-        print(result)
+        # print(result)
         token = result['sys']['token']
-        print(token)
+        # print(token)
         return result
 
     def create_order(self, token):
@@ -380,6 +382,39 @@ class TestTools(object):
         vals = {'cs_no': cs_no}
         result = self.sock.execute(self.dbname, self.uid, self.pwd, 'used.by.tester', 'after_sale_confirm', vals)
         return result
+
+    def query_after_sale_list(self, request):
+        """查询可申请售后商品"""
+        so_cs = request.POST.get('so_cs_value', '')
+        cs_type = request.POST.get('cs_type', '')
+        cr = self.connection.cursor()
+        if cs_type == '请选择':
+            return {'mark':'1', 'message':'请选择售后类型'}
+        elif cs_type == '取消':
+            cr.execute("select a.sku_code, (a.quantity-a.send_quantity-a.cancel_quantity) as avaliable_cancle_num from oc.order_detail a where a.order_id = '"+ so_cs+"'")
+            cr_r = cr.fetchall()
+            return {'mark':'0', 'message':'查询成功', 'available_cs_detail':cr_r}
+        else:
+            cr.execute("select a.sku_code, a.send_quantity as avaliable_cancle_num from oc.order_detail a where a.order_id = '"+ so_cs+"'")
+            cr_r = cr.fetchall()
+            return {'mark':'0', 'message':'查询成功', 'available_cs_detail':cr_r}
+
+    def create_after_sale_list(self, request):
+        """创建售后申请单"""
+        so_cs = request.POST.get('so_cs_value', '')
+        order_available_sku = request.POST.getlist('order_available_sku', '')
+        sku_handle_num = request.POST.getlist('sku_handle_num', '')
+        cr = self.connection.cursor()
+        for m in sku_handle_num:
+            if m == '':
+                return {'mark' : '1', 'message' : '数据填写不完整'}
+            else:
+                for j in order_available_sku:
+                    cr.execute("select a.brand_Name, a.product_Name, a.unit, a.product_Pic, a.product_Model, a.sale_Price from oc.order_detail a "
+                        "where a.order_id = '"+ so_cs +"' and a.sku_code = '"+ i +"'" )
+                    cr_r = cr.fetchall()
+                    print(cr_r)
+        url = 'http://opc-' + self.env + '.ehsy.com/admin/cs/saveCSApplyAndDetailOnly'
 
     def after_sale_done(self, request):
         cs_no = request.POST.get('cs_no', '')

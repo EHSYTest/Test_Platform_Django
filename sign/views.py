@@ -7,6 +7,7 @@ from xlwt import Style
 from django.contrib import messages
 from sign.test_tools import TestTools
 import datetime
+import decimal
 
 def index(request):
     """index首页"""
@@ -152,26 +153,33 @@ def tools_button(request):
     num = request.POST.get('invoice_num', '')       # 获取输入的发票编号
     order_sku = request.POST.getlist('order_sku', '')    # 获取输入的sku
     order_sku_quantity = request.POST.getlist('order_sku_quantity', '')     # 获取输入的sku数量
-    # print(order_sku, order_sku_quantity)
+    so_cs = request.POST.get('so_cs_value', '')         #获取申请售后的so单号
+    cs_type = request.POST.get('cs_type', '')        #获取申请售后的售后类型
+    if cs_type == '取消':
+        cs_type_other = '退货'
+    elif cs_type == '退货':
+        cs_type_other = '取消'
     action = request.POST.get('button')     # 从button的value值分析所需要进行的操作
     if action in ('生成发货单', '生成PO', '西域确认PO', '直发转非直发', '供应商确认', 'PO查询', 'SO开票', 'SO全部发货', '查询', '更新', '售后确认', '售后完结', '售后作废'):
-        tt = TestTools(env, so_value, num, po_value, order_sku, order_sku_quantity, odoo_flag=True)   # test_tools模块类实例
+        tt = TestTools(env, so_value, num, po_value, order_sku, order_sku_quantity, so_cs, cs_type, odoo_flag=True)   # test_tools模块类实例
     elif action in ('发货', 'SO查询', 'SO发货'):
-        tt = TestTools(env, so_value, num, po_value, order_sku, order_sku_quantity, odoo_flag=True, odoo_db=True)
-    elif action in ('SO单号查询', ):
-        tt = TestTools(env, so_value, num, po_value, order_sku, order_sku_quantity, oc_db=True)
+        tt = TestTools(env, so_value, num, po_value, order_sku, order_sku_quantity, so_cs, cs_type, odoo_flag=True, odoo_db=True)
+    elif action in ('SO单号查询', 'SO售后申请查询', '提交售后申请单'):
+        tt = TestTools(env, so_value, num, po_value, order_sku, order_sku_quantity, so_cs, cs_type, oc_db=True)
     else:
-        tt = TestTools(env, so_value, num, po_value, order_sku, order_sku_quantity)
+        tt = TestTools(env, so_value, num, po_value, order_sku, order_sku_quantity, so_cs, cs_type)
     result = {}
     other = ''      # 需要在message上显示的附加信息，如：PO单号
     if env == 'staging':
         env_b = 'test'   # env_b标志另一个测试环境（select下拉选项的另一个，为了最终原样返回选择的环境）
     elif env == 'test':
         env_b = 'staging'
-    bring_back_vals = {'so_value': so_value, 'env': env, 'env_b': env_b, 'invoice_value': num, 'po_value': po_value, 'order_sku' : order_sku, 'order_sku_quantity' : order_sku_quantity}
+    bring_back_vals = {'so_value': so_value, 'env': env, 'env_b': env_b, 'invoice_value': num, 'po_value': po_value, 'order_sku' : order_sku,
+                       'order_sku_quantity' : order_sku_quantity, 'so_cs': so_cs, 'cs_type':cs_type, 'cs_type_other':cs_type_other}
     if action == '获取Token':
         result = tt.login()
         request.session['token'] = result['sys']['token']
+        # print(result)
     if action == '生成订单':    # test_tools模块对应函数
         token = request.session.get('token', '')
         if not token:
@@ -250,6 +258,24 @@ def tools_button(request):
         bring_back_vals.update({'po_detail': po_detail})
     if action == 'SO开票':
         result = tt.so_invoice()
+    if action == 'SO售后申请查询':
+        result = tt.query_after_sale_list(request)
+        print(result['available_cs_detail'])
+        def MyDefault(obj):
+            if isinstance(obj, decimal.Decimal):
+                return str(obj)
+        if result['mark'] == '0':
+            bring_back_vals.update({'available_cs_detail':result['available_cs_detail']})
+            request.session['available_cs_detail'] = json.dumps(result['available_cs_detail'], default=MyDefault)
+
+    if action == '提交售后申请单':
+        available_cs_detail = request.session.get('available_cs_detail')
+        print(available_cs_detail)
+        bring_back_vals.update({'available_cs_detail':available_cs_detail})
+        sku_handle_num = request.POST.getlist('sku_handle_num', '')
+        bring_back_vals.update({'sku_handle_num':sku_handle_num})
+        result = tt.create_after_sale_list(request)
+        print(result)
     if action == '售后确认':
         cs_no = request.POST.get('cs_no', '')
         bring_back_vals.update({'cs_no': cs_no})
