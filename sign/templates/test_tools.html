@@ -88,24 +88,16 @@
                     <input name="button" type="submit" value="确认订单">
                 </td>
                 <td>
-                    <input name="button" type="submit" value="生成发货单">
+                    <input name="button" type="submit" value="分配库存">
                 </td>
                 <td>
                     <input name="button" type="submit" value="SO查询">
-                </td>
-            </tr>
-        </div>
-                <div>
-            <tr>
-                <td class="text-left">发票编号</td>
-                <td class="text-left" width="100">
-                    <input name="invoice_num" type="text" value="{{invoice_value}}" placeholder="KS开头编号">
                 </td>
                 <td class="text-left" width="100">
                     <input name="button" type="submit" value="SO开票">
                 </td>
             </tr>
-        </div>
+
     {% if so_detail %}
         <div>
             <table>
@@ -236,7 +228,6 @@
                 <select name="cs_type">
                     {% if cs_type %}
                         <option value="{{cs_type}}">{{cs_type}}</option>
-                        <option value="请选择">请选择</option>
                         <option value="{{cs_type_other}}">{{cs_type_other}}</option>
                     {% else %}
                         <option value="请选择">请选择</option>
@@ -266,7 +257,6 @@
                 </thead>
                 <tbody>
                 {% for i in available_cs_detail %}
-                {{i}}
                     <tr>
                         <td><input name="order_available_sku" type="text" value="{{i.sku_code}}"></td>
                         <td><input name="sku_available_handle" type="text" value="{{i.avaliable_cancle_num}}"></td>

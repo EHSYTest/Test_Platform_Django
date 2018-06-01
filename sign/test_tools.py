@@ -54,6 +54,7 @@ class TestTools(object):
                 self.usr = 'admin'
                 self.pwd = 'admin'
                 self.oe_ip = 'odoo-test.ehsy.com'
+                # self.oe_ip = 'localhost:8069'
                 self.sock_common = client.ServerProxy('http://' + self.oe_ip + '/xmlrpc/common')
                 self.uid = self.sock_common.login(self.dbname, self.usr, self.pwd)
                 self.sock = client.ServerProxy('http://' + self.oe_ip + '/xmlrpc/object')
@@ -154,7 +155,7 @@ class TestTools(object):
         result = r.json()
         return result
 
-    def create_delivery(self):
+    def create_delivery_allocate(self):
         vals = {
             'so': self.order_id
         }
@@ -287,9 +288,9 @@ class TestTools(object):
 
     def so_invoice(self):
         """SO开票-Odoo"""
-        if not self.num:
-            return {'mark': '1', 'message': '发票编号不能为空！'}
-        vals = {'ks_no': self.num}
+        if not self.order_id:
+            return {'mark': '1', 'message': 'SO单号不能为空！'}
+        vals = {'so': self.order_id}
         try:
             result = self.sock.execute(self.dbname, self.uid, self.pwd, 'used.by.tester', 'so_invoice', vals)
         except Exception:
@@ -393,11 +394,11 @@ class TestTools(object):
         elif cs_type == '取消':
             cr.execute("select a.sku_code, (a.quantity-a.send_quantity-a.cancel_quantity) as avaliable_cancle_num from oc.order_detail a where a.order_id = '"+ so_cs+"'")
             cr_r = cr.fetchall()
-            return {'mark':'0', 'message':'查询成功', 'available_cs_detail':cr_r}
+
         else:
             cr.execute("select a.sku_code, a.send_quantity as avaliable_cancle_num from oc.order_detail a where a.order_id = '"+ so_cs+"'")
             cr_r = cr.fetchall()
-            return {'mark':'0', 'message':'查询成功', 'available_cs_detail':cr_r}
+        return {'mark':'0', 'message':'查询成功', 'available_cs_detail':cr_r}
 
     def create_after_sale_list(self, request):
         """创建售后申请单"""

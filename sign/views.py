@@ -159,8 +159,11 @@ def tools_button(request):
         cs_type_other = '退货'
     elif cs_type == '退货':
         cs_type_other = '取消'
+    if cs_type == '请选择':
+        cs_type = ''
+        cs_type_other = ''
     action = request.POST.get('button')     # 从button的value值分析所需要进行的操作
-    if action in ('生成发货单', '生成PO', '西域确认PO', '直发转非直发', '供应商确认', 'PO查询', 'SO开票', 'SO全部发货', '查询', '更新', '售后确认', '售后完结', '售后作废'):
+    if action in ('分配库存', '生成PO', '西域确认PO', '直发转非直发', '供应商确认', 'PO查询', 'SO开票', 'SO全部发货', '查询', '更新', '售后确认', '售后完结', '售后作废'):
         tt = TestTools(env, so_value, num, po_value, order_sku, order_sku_quantity, so_cs, cs_type, odoo_flag=True)   # test_tools模块类实例
     elif action in ('发货', 'SO查询', 'SO发货'):
         tt = TestTools(env, so_value, num, po_value, order_sku, order_sku_quantity, so_cs, cs_type, odoo_flag=True, odoo_db=True)
@@ -219,8 +222,8 @@ def tools_button(request):
         result = tt.order_payed()
     if action == '确认订单':
         result = tt.order_confirm()
-    if action == '生成发货单':
-        result = tt.create_delivery()
+    if action == '分配库存':
+        result = tt.create_delivery_allocate()
     if action == '生成PO':
         so = request.POST.get('so_po_value', '')
         bring_back_vals.update({'so_po_value': so})
@@ -270,8 +273,8 @@ def tools_button(request):
 
     if action == '提交售后申请单':
         available_cs_detail = request.session.get('available_cs_detail')
-        print(available_cs_detail)
-        bring_back_vals.update({'available_cs_detail':available_cs_detail})
+        print(available_cs_detail, type(available_cs_detail))
+        bring_back_vals.update({'available_cs_detail': eval(available_cs_detail)})
         sku_handle_num = request.POST.getlist('sku_handle_num', '')
         bring_back_vals.update({'sku_handle_num':sku_handle_num})
         result = tt.create_after_sale_list(request)
