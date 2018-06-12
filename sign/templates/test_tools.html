@@ -229,6 +229,7 @@
                     {% if cs_type %}
                         <option value="{{cs_type}}">{{cs_type}}</option>
                         <option value="{{cs_type_other}}">{{cs_type_other}}</option>
+                        <option value="{{cs_type_another}}">{{cs_type_another}}</option>
                     {% else %}
                         <option value="请选择">请选择</option>
                         <option value="取消">取消</option>
@@ -244,7 +245,6 @@
                 <td><input name="button" type="submit" value="SO售后申请查询"></td>
             </tr>
         </div>
-        {{available_cs_detail}}
         {% if available_cs_detail %}
         <div>
             <table>
@@ -260,7 +260,7 @@
                     <tr>
                         <td><input name="order_available_sku" type="text" value="{{i.sku_code}}"></td>
                         <td><input name="sku_available_handle" type="text" value="{{i.avaliable_cancle_num}}"></td>
-                        <td><input name="sku_handle_num" type="text"></td>
+                        <td><input name="sku_handle_num" type="text" value="{{i.sku_handle_num}}"></td>
                     </tr>
                 {% endfor %}
                 <td><input name="button" type="submit" value="提交售后申请单"></td>
