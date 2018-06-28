@@ -144,7 +144,6 @@ def test_tools(request):
     envs = ['staging', 'test', 'test2', 'test3', 'test4', 'test5', 'test6']
     return render(request, 'test_tools.html', {'envs': envs})
 
-
 def tools_button(request):
     """测试工具页button对应处理函数"""
     env = request.POST.get('environment')   # 获取选择的测试环境
@@ -156,14 +155,16 @@ def tools_button(request):
     so_cs = request.POST.get('so_cs_value', '')         #获取申请售后的so单号
     cs_type = request.POST.get('cs_type', '')        #获取申请售后的售后类型
     if cs_type == '取消':
-        cs_type_other = '退货'
+        cs_type_other = '请选择'
+        cs_type_another = '退货'
     elif cs_type == '退货':
+        cs_type_other = '请选择'
+        cs_type_another = '取消'
+    else:
         cs_type_other = '取消'
-    if cs_type == '请选择':
-        cs_type = ''
-        cs_type_other = ''
+        cs_type_another = '退货'
     action = request.POST.get('button')     # 从button的value值分析所需要进行的操作
-    if action in ('分配库存', '生成PO', '西域确认PO', '直发转非直发', '供应商确认', 'PO查询', 'SO开票', 'SO全部发货', '查询', '更新', '售后确认', '售后完结', '售后作废'):
+    if action in ('生成发货单', '生成PO', '西域确认PO', '直发转非直发', '供应商确认', 'PO查询', 'SO开票', 'SO全部发货', '查询', '更新', '售后确认', '售后完结', '售后作废'):
         tt = TestTools(env, so_value, num, po_value, order_sku, order_sku_quantity, so_cs, cs_type, odoo_flag=True)   # test_tools模块类实例
     elif action in ('发货', 'SO查询', 'SO发货'):
         tt = TestTools(env, so_value, num, po_value, order_sku, order_sku_quantity, so_cs, cs_type, odoo_flag=True, odoo_db=True)
@@ -177,7 +178,7 @@ def tools_button(request):
     envs.remove(env)
     envs.insert(0, env)
     bring_back_vals = {'so_value': so_value, 'envs': envs, 'invoice_value': num, 'po_value': po_value, 'order_sku' : order_sku,
-                       'order_sku_quantity' : order_sku_quantity, 'so_cs': so_cs, 'cs_type':cs_type, 'cs_type_other':cs_type_other}
+                       'order_sku_quantity' : order_sku_quantity, 'so_cs': so_cs, 'cs_type':cs_type, 'cs_type_other':cs_type_other, 'cs_type_another':cs_type_another}
     if action == '获取Token':
         result = tt.login()
         request.session['token'] = result['sys']['token']
@@ -188,6 +189,7 @@ def tools_button(request):
             messages.error(request, 'No Token')
             return render(request, 'test_tools.html', bring_back_vals)
         result = tt.create_order(token)
+        print(result)
         if result['mark'] == '0':
             messages.success(request, result['data']['orderId'])
             return render(request, 'test_tools.html', bring_back_vals)
@@ -262,22 +264,28 @@ def tools_button(request):
         result = tt.so_invoice()
     if action == 'SO售后申请查询':
         result = tt.query_after_sale_list(request)
-        print(result['available_cs_detail'])
         def MyDefault(obj):
             if isinstance(obj, decimal.Decimal):
                 return str(obj)
         if result['mark'] == '0':
-            bring_back_vals.update({'available_cs_detail':result['available_cs_detail']})
-            request.session['available_cs_detail'] = json.dumps(result['available_cs_detail'], default=MyDefault)
-
+            if result['available_cs_detail'] == []:
+                messages.success(request, result['message']+'，没有可申请取消或退货的商品')
+                return render(request, 'test_tools.html' , bring_back_vals)
+            else:
+                bring_back_vals.update({'available_cs_detail':result['available_cs_detail']})
+                available_cs_detail = json.dumps(result['available_cs_detail'], default=MyDefault)  #转化成json格式
+                available_cs_detail = json.loads(available_cs_detail)   #转化成字典格式
+                request.session['available_cs_detail'] =available_cs_detail
     if action == '提交售后申请单':
         available_cs_detail = request.session.get('available_cs_detail')
-        print(available_cs_detail, type(available_cs_detail))
-        bring_back_vals.update({'available_cs_detail': eval(available_cs_detail)})
         sku_handle_num = request.POST.getlist('sku_handle_num', '')
-        bring_back_vals.update({'sku_handle_num':sku_handle_num})
+        for i in range(len(available_cs_detail)):
+            available_cs_detail[i].update({'sku_handle_num':sku_handle_num[i]})
+        # print(available_cs_detail)
+        bring_back_vals.update({'available_cs_detail': available_cs_detail})
         result = tt.create_after_sale_list(request)
-        print(result)
+        if result['mark'] == '0':
+            other = result['CS_NO']
     if action == '售后确认':
         cs_no = request.POST.get('cs_no', '')
         bring_back_vals.update({'cs_no': cs_no})
