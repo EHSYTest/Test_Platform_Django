@@ -291,10 +291,7 @@ class TestTools(object):
         if not self.order_id:
             return {'mark': '1', 'message': 'SO单号不能为空！'}
         vals = {'so': self.order_id, 'env': self.env}
-        try:
-            result = self.sock.execute(self.dbname, self.uid, self.pwd, 'used.by.tester', 'so_invoice', vals)
-        except Exception:
-            result = {'mark': '1', 'message': '接口调用异常'}
+        result = self.sock.execute(self.dbname, self.uid, self.pwd, 'used.by.tester', 'so_invoice', vals)
         return result
 
     def query_so_send_detail(self):
@@ -394,31 +391,79 @@ class TestTools(object):
         cr = self.connection.cursor()
         if cs_type == '请选择':
             return {'mark':'1', 'message':'请选择售后类型'}
-        elif cs_type == '取消':
-            cr.execute("select a.sku_code, (a.quantity-a.send_quantity-a.cancel_quantity) as avaliable_cancle_num from oc.order_detail a where a.order_id = '"+ so_cs+"'")
+        if so_cs == '':
+            return {'mark': '1', 'message': '请输入申请售后的SO单号'}
+        if cs_type == '取消' and so_cs != '':
+            cr.execute("select a.sku_code, (a.quantity-a.send_quantity) as avaliable_cancle_num from oc.order_detail a where a.order_id = '"+ so_cs+"'")
             cr_r = cr.fetchall()
-
-        else:
+            cr.execute("select c.sku_code, c.quantity from oc.cs_apply_detail c where c.cs_no in (select b.cs_no from oc.cs_apply b where b.cs_status=0 and b.ORDER_ID = '"+ so_cs +"' and b.cs_type=9)")
+            cr_2 = cr.fetchall()
+            for i in cr_r:
+                for j in cr_2:
+                    if i['sku_code'] == j['sku_code']:
+                        i['avaliable_cancle_num'] = i['avaliable_cancle_num'] - j['quantity']
+            # print(cr_r, cr_2)
+        if cs_type == '退货' and so_cs != '':
             cr.execute("select a.sku_code, a.send_quantity as avaliable_cancle_num from oc.order_detail a where a.order_id = '"+ so_cs+"'")
             cr_r = cr.fetchall()
-        return {'mark':'0', 'message':'查询成功', 'available_cs_detail':cr_r}
+            cr.execute("select b.sku_code, b.quantity from oc.cs_apply_detail b where b.CS_NO in (select a.CS_NO from oc.cs_apply a where a.order_id = '"+ so_cs +"' and a.CS_TYPE = 0 and a.CS_STATUS =0) and b.CS_TYPE =0")
+            cr_1 = cr.fetchall()
+            cr.execute("select b.sku_code, b.quantity from oc.cs_apply_detail b where b.CS_NO in (select a.CS_NO from oc.cs_apply a where a.order_id = '"+ so_cs +"' and a.CS_TYPE = 0 and a.CS_STATUS in(1,99)) and b.CS_TYPE =1")
+            cr_2 = cr.fetchall()
+            for i in cr_r:
+                for j in cr_1:
+                    if i['sku_code'] == j['sku_code']:
+                        i['avaliable_cancle_num'] = i['avaliable_cancle_num'] - j['quantity']
+            for i in cr_r:
+                for j in cr_2:
+                    if i['sku_code'] == j['sku_code']:
+                        i['avaliable_cancle_num'] = i['avaliable_cancle_num'] - j['quantity']
+        list = []
+        for i in cr_r:
+            if int(i['avaliable_cancle_num']) >= 1 :
+                list.append(i)
+        # print(list)
+        return {'mark':'0', 'message':'查询成功', 'available_cs_detail':list}
 
     def create_after_sale_list(self, request):
         """创建售后申请单"""
+        cs_type = request.POST.get('cs_type', '')
         so_cs = request.POST.get('so_cs_value', '')
         order_available_sku = request.POST.getlist('order_available_sku', '')
         sku_handle_num = request.POST.getlist('sku_handle_num', '')
+        dictionary = dict(zip(order_available_sku, sku_handle_num))
+        list = []
         cr = self.connection.cursor()
-        for m in sku_handle_num:
-            if m == '':
-                return {'mark' : '1', 'message' : '数据填写不完整'}
-            else:
-                for j in order_available_sku:
-                    cr.execute("select a.brand_Name, a.product_Name, a.unit, a.product_Pic, a.product_Model, a.sale_Price from oc.order_detail a "
-                        "where a.order_id = '"+ so_cs +"' and a.sku_code = '"+ i +"'" )
+        if not any(sku_handle_num):
+            return {'mark' : '1', 'message' : '请正确填写申请取消或退货的商品数量'}
+        else:
+            for i in dictionary.items():
+                if i[1] != '' and i[1] != 0:
+                    cr.execute("select a.sku_code as skuCode, a.brand_Name as brandName, a.product_Name as productName, a.unit, a.product_Pic as productPic, a.product_Model as productModel, a.sale_Price as salePrice from oc.order_detail a "
+                        "where a.order_id = '"+ so_cs +"' and a.sku_code = '"+ i[0] +"'" )
+                    self.connection.commit()
                     cr_r = cr.fetchall()
-                    print(cr_r)
-        url = 'http://opc-' + self.env + '.ehsy.com/admin/cs/saveCSApplyAndDetailOnly'
+                    data_sku = {"quantity":i[1], "refundAmt":"","reparationAmt":"","warehouseCode":"","worthless":"","transferAmount":"","returnToSupplier":0,"remark":"test"}
+                    data_sku.update(cr_r[0])
+                    a  = data_sku['salePrice']
+                    data_sku['salePrice'] = float(a)
+                    list.append(data_sku)
+            if cs_type == '取消':
+                url = 'http://oc-' + self.env + '.ehsy.com/admin/cs/saveCSApplyAndDetailOnly'
+                data = {"csType":9,"orderId":so_cs,"actualDetailList":list, "userId":"admin","createUserName":"\u897f\u57dfOPC"}
+                # 参数为表单用户data=；参数为json串用json=或data=json.dumps()
+                r = requests.post(url, data=json.dumps(data))
+                result = r.json()
+            if cs_type == '退货':
+                url = 'http://oc-' + self.env + '.ehsy.com/admin/cs/saveCSApplyAndDetailOnly'
+                data = {"csType":0,"orderId":so_cs,"actualDetailList":[data_sku], "userId":"admin","createUserName":"\u897f\u57dfOPC"}
+                r = requests.post(url, json=data)
+                result = r.json()
+            # cr = self.connection.cursor()
+            cr.execute("select a.CS_NO from oc.cs_apply a where a.order_id = '"+ so_cs +"' ORDER BY a.CREATE_TIME DESC limit 1")
+            cr_r = cr.fetchall()
+            result.update(cr_r[0])
+        return result
 
     def after_sale_done(self, request):
         cs_no = request.POST.get('cs_no', '')
