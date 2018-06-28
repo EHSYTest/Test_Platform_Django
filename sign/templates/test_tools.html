@@ -27,13 +27,9 @@
                 </td>
                 <td>
                     <select name="environment">
-                        {% if env %}
+                        {% for env in envs %}
                             <option value="{{env}}">{{env}}</option>
-                            <option value="{{env_b}}">{{env_b}}</option>
-                        {% else %}
-                            <option value="staging">staging</option>
-                            <option value="test">test</option>
-                        {% endif %}
+                        {% endfor %}
                     </select>
                 </td>
                 <td><input name="button" type="submit" value="获取Token"></td>
