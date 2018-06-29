@@ -317,6 +317,7 @@ class TestTools(object):
         return result
 
     def so_send(self, request):
+        """SO发货--按输入的数量发货"""
         vals = {}
         sku_list = request.POST.getlist('so_sku', '')
         send_qty_list = request.POST.getlist('so_send_qty', '')
@@ -331,6 +332,8 @@ class TestTools(object):
         vals['send_no'] = send_no
         # vals['send_company'] = send_company
         send_detail = []
+
+        # 组装发货明细参数send_detail
         for i in range(len(sku_list)):
             if send_qty_list[i]:
                 detail = {}
@@ -340,24 +343,27 @@ class TestTools(object):
             else:
                 continue
         vals['send_detail'] = send_detail
+
         vals['env'] = env
         result = self.sock.execute(self.dbname, self.uid, self.pwd, 'used.by.tester', 'test_so_transfer', vals)
         return result
 
     def so_send_all(self, request):
+        """SO全部发货"""
         vals = {}
         send_no = request.POST.get('so_send_no', '')
         env = self.env
         if not (self.order_id and send_no and env):
             return {'mark': '1', 'message': '数据填写不完整'}
         vals['so'] = self.order_id
-        vals['batch_flag'] = 'false'
+        vals['batch_flag'] = 'false'    # 分批发货标志，false:全部发货； true部分发货
         vals['send_no'] = send_no
         vals['env'] = env
         result = self.sock.execute(self.dbname, self.uid, self.pwd, 'used.by.tester', 'test_so_transfer', vals)
         return result
 
     def query_stock(self, request):
+        """查询odoo库存"""
         sku = request.POST.get('sku_stock', '')
         if not sku:
             return {'mark': '1', 'message': 'SKU不能为空'}
@@ -366,6 +372,7 @@ class TestTools(object):
         return result
 
     def update_stock(self, request):
+        """更新odoo库存"""
         sku = request.POST.get('sku_stock', '')
         update_qty = request.POST.get('qty_stock', '')
         if not sku:
@@ -377,6 +384,7 @@ class TestTools(object):
         return result
 
     def after_sale_confirm(self, request):
+        """售后确认"""
         cs_no = request.POST.get('cs_no', '')
         if not cs_no:
             return {'mark': '1', 'message': 'CS_No不能为空'}
@@ -466,6 +474,7 @@ class TestTools(object):
         return result
 
     def after_sale_done(self, request):
+        """售后申请完结"""
         cs_no = request.POST.get('cs_no', '')
         if not cs_no:
             return {'mark': '1', 'message': 'CS_No不能为空'}
@@ -474,6 +483,7 @@ class TestTools(object):
         return result
 
     def after_sale_refuse(self, request):
+        """售后申请作废"""
         cs_no = request.POST.get('cs_no', '')
         if not cs_no:
             return {'mark': '1', 'message': 'CS_No不能为空'}
@@ -482,6 +492,7 @@ class TestTools(object):
         return result
 
     def query_so_no(self, request):
+        """通过外部订单号查询SO单号"""
         ex_no = request.POST.get('ex_no', '')
         if not ex_no:
             return {'mark': '1', 'message': '外部订单号不能为空！'}

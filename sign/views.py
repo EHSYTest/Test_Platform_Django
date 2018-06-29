@@ -164,7 +164,7 @@ def tools_button(request):
         cs_type_other = '取消'
         cs_type_another = '退货'
     action = request.POST.get('button')     # 从button的value值分析所需要进行的操作
-    if action in ('生成发货单', '生成PO', '西域确认PO', '直发转非直发', '供应商确认', 'PO查询', 'SO开票', 'SO全部发货', '查询', '更新', '售后确认', '售后完结', '售后作废'):
+    if action in ('生成发货单', '生成PO', '西域确认PO', '直发转非直发', '供应商确认', 'PO查询', 'SO开票', '分配库存', 'SO全部发货', '查询', '更新', '售后确认', '售后完结', '售后作废'):
         tt = TestTools(env, so_value, num, po_value, order_sku, order_sku_quantity, so_cs, cs_type, odoo_flag=True)   # test_tools模块类实例
     elif action in ('发货', 'SO查询', 'SO发货'):
         tt = TestTools(env, so_value, num, po_value, order_sku, order_sku_quantity, so_cs, cs_type, odoo_flag=True, odoo_db=True)
