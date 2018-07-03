@@ -388,7 +388,7 @@ class TestTools(object):
         cs_no = request.POST.get('cs_no', '')
         if not cs_no:
             return {'mark': '1', 'message': 'CS_No不能为空'}
-        vals = {'cs_no': cs_no}
+        vals = {'cs_no': cs_no, 'env': self.env}
         result = self.sock.execute(self.dbname, self.uid, self.pwd, 'used.by.tester', 'after_sale_confirm', vals)
         return result
 
@@ -478,7 +478,7 @@ class TestTools(object):
         cs_no = request.POST.get('cs_no', '')
         if not cs_no:
             return {'mark': '1', 'message': 'CS_No不能为空'}
-        vals = {'cs_no': cs_no}
+        vals = {'cs_no': cs_no, 'env': self.env}
         result = self.sock.execute(self.dbname, self.uid, self.pwd, 'used.by.tester', 'after_sale_done', vals)
         return result
 
@@ -487,7 +487,7 @@ class TestTools(object):
         cs_no = request.POST.get('cs_no', '')
         if not cs_no:
             return {'mark': '1', 'message': 'CS_No不能为空'}
-        vals = {'cs_no': cs_no}
+        vals = {'cs_no': cs_no, 'env': self.env}
         result = self.sock.execute(self.dbname, self.uid, self.pwd, 'used.by.tester', 'after_sale_refuse', vals)
         return result
 
