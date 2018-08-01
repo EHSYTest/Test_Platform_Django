@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="45ad1637-910c-47b8-917e-03564a61786b" name="Default" comment="">
+    <list default="true" id="45ad1637-910c-47b8-917e-03564a61786b" name="Default" comment="New">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/sign/test_tools.py" afterPath="$PROJECT_DIR$/sign/test_tools.py" />
+      <change beforePath="$PROJECT_DIR$/guest/settings.py" afterPath="$PROJECT_DIR$/guest/settings.py" />
+      <change beforePath="$PROJECT_DIR$/sign/templates/test_tools.html" afterPath="$PROJECT_DIR$/sign/templates/test_tools.html" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -13,7 +14,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/Test_Platform_Django$.coverage" NAME="调用 Coverage Results" MODIFIED="1529652558244" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/.." />
+    <SUITE FILE_PATH="coverage/Test_Platform_Django$.coverage" NAME="测试 Coverage Results" MODIFIED="1531704698203" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/.." />
   </component>
   <component name="DjangoConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)">
     <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
@@ -23,18 +24,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="urls.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/guest/urls.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="27" column="37" lean-forward="false" selection-start-line="27" selection-start-column="37" selection-end-line="27" selection-end-column="37" />
-              <folding>
-                <element signature="e#639#680#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/sign/views.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -48,8 +37,18 @@
       <file leaf-file-name="test_tools.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/sign/templates/test_tools.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="10" column="14" lean-forward="false" selection-start-line="10" selection-start-column="14" selection-end-line="10" selection-end-column="14" />
+            <state relative-caret-position="493">
+              <caret line="81" column="20" lean-forward="true" selection-start-line="81" selection-start-column="20" selection-end-line="81" selection-end-column="20" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/sign/models.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="153">
+              <caret line="12" column="21" lean-forward="false" selection-start-line="12" selection-start-column="21" selection-end-line="12" selection-end-column="21" />
               <folding />
             </state>
           </provider>
@@ -58,27 +57,37 @@
       <file leaf-file-name="test_tools.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/sign/test_tools.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="337">
-              <caret line="59" column="85" lean-forward="false" selection-start-line="59" selection-start-column="85" selection-end-line="59" selection-end-column="85" />
+            <state relative-caret-position="340">
+              <caret line="61" column="37" lean-forward="true" selection-start-line="61" selection-start-column="37" selection-end-line="61" selection-end-column="37" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
-                <marker date="1530600265527" expanded="true" signature="10658:10774" ph="select b.gui... purchase_order" />
-                <marker date="1530600265527" expanded="true" signature="11396:11620" ph="select a.pro... purchase_order_line" />
-                <marker date="1530600265527" expanded="true" signature="11514:11582" ph="select id fr... purchase_order" />
-                <marker date="1530600265527" expanded="true" signature="11795:11864" ph="select name product_uom" />
-                <marker date="1530600265527" expanded="true" signature="13006:13206" ph="select a.pro... sale_order_line" />
-                <marker date="1530600265527" expanded="true" signature="13471:13543" ph="select defau... product_product" />
-                <marker date="1530600265527" expanded="true" signature="17319:17445" ph="select a.sku... order_detail" />
-                <marker date="1530600265527" expanded="true" signature="17505:17680" ph="select c.sku... cs_apply_detail" />
-                <marker date="1530600265527" expanded="true" signature="17579:17679" ph="select b.cs_... cs_apply" />
-                <marker date="1530600265527" expanded="true" signature="18023:18136" ph="select a.sku... order_detail" />
-                <marker date="1530600265527" expanded="true" signature="18196:18391" ph="select b.sku... cs_apply_detail" />
-                <marker date="1530600265527" expanded="true" signature="18270:18373" ph="select a.CS_... cs_apply" />
-                <marker date="1530600265527" expanded="true" signature="18451:18652" ph="select b.sku... cs_apply_detail" />
-                <marker date="1530600265527" expanded="true" signature="18525:18634" ph="select a.CS_... cs_apply" />
-                <marker date="1530600265527" expanded="true" signature="21576:21678" ph="select a.CS_... cs_apply" />
-                <marker date="1530600265527" expanded="true" signature="22775:22852" ph="select a.ord... order_info" />
+                <marker date="1533110052945" expanded="true" signature="10658:10774" ph="select b.gui... purchase_order" />
+                <marker date="1533110052945" expanded="true" signature="11396:11620" ph="select a.pro... purchase_order_line" />
+                <marker date="1533110052945" expanded="true" signature="11514:11582" ph="select id fr... purchase_order" />
+                <marker date="1533110052945" expanded="true" signature="11795:11864" ph="select name product_uom" />
+                <marker date="1533110052945" expanded="true" signature="13006:13206" ph="select a.pro... sale_order_line" />
+                <marker date="1533110052945" expanded="true" signature="13471:13543" ph="select defau... product_product" />
+                <marker date="1533110052945" expanded="true" signature="17319:17445" ph="select a.sku... order_detail" />
+                <marker date="1533110052945" expanded="true" signature="17505:17680" ph="select c.sku... cs_apply_detail" />
+                <marker date="1533110052945" expanded="true" signature="17579:17679" ph="select b.cs_... cs_apply" />
+                <marker date="1533110052945" expanded="true" signature="18023:18136" ph="select a.sku... order_detail" />
+                <marker date="1533110052945" expanded="true" signature="18196:18391" ph="select b.sku... cs_apply_detail" />
+                <marker date="1533110052945" expanded="true" signature="18270:18373" ph="select a.CS_... cs_apply" />
+                <marker date="1533110052945" expanded="true" signature="18451:18652" ph="select b.sku... cs_apply_detail" />
+                <marker date="1533110052945" expanded="true" signature="18525:18634" ph="select a.CS_... cs_apply" />
+                <marker date="1533110052945" expanded="true" signature="21576:21678" ph="select a.CS_... cs_apply" />
+                <marker date="1533110052945" expanded="true" signature="22775:22852" ph="select a.ord... order_info" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/sign/templates/index.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1190">
+              <caret line="70" column="14" lean-forward="false" selection-start-line="70" selection-start-column="14" selection-end-line="70" selection-end-column="14" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -88,9 +97,7 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="187">
               <caret line="12" column="70" lean-forward="false" selection-start-line="12" selection-start-column="70" selection-end-line="12" selection-end-column="70" />
-              <folding>
-                <element signature="e#0#25#0" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -105,11 +112,33 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="upload_case.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/sign/templates/upload_case.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="527">
+              <caret line="31" column="5" lean-forward="false" selection-start-line="31" selection-start-column="5" selection-end-line="31" selection-end-column="5" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="测试.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../测试.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="102">
+              <caret line="7" column="24" lean-forward="false" selection-start-line="7" selection-start-column="24" selection-end-line="7" selection-end-column="24" />
+              <folding>
+                <element signature="e#0#25#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="settings.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/guest/settings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1547">
-              <caret line="91" column="28" lean-forward="false" selection-start-line="91" selection-start-column="28" selection-end-line="91" selection-end-column="28" />
+            <state relative-caret-position="748">
+              <caret line="44" column="0" lean-forward="false" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -127,7 +156,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>mysql</find>
       <find>second</find>
       <find>workbook</find>
       <find>worksh</find>
@@ -157,6 +185,7 @@
       <find>allo</find>
       <find>env</find>
       <find>售后</find>
+      <find>allow</find>
     </findStrings>
     <replaceStrings>
       <replace>case</replace>
@@ -208,10 +237,11 @@
         <option value="$PROJECT_DIR$/sign/templates/test.html" />
         <option value="$PROJECT_DIR$/guest/urls.py" />
         <option value="$PROJECT_DIR$/sign/models.py" />
-        <option value="$PROJECT_DIR$/sign/templates/test_tools.html" />
         <option value="$PROJECT_DIR$/../调用.py" />
-        <option value="$PROJECT_DIR$/guest/settings.py" />
         <option value="$PROJECT_DIR$/sign/views.py" />
+        <option value="$PROJECT_DIR$/guest/settings.py" />
+        <option value="$PROJECT_DIR$/../测试.py" />
+        <option value="$PROJECT_DIR$/sign/templates/test_tools.html" />
         <option value="$PROJECT_DIR$/sign/test_tools.py" />
       </list>
     </option>
@@ -244,6 +274,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -271,13 +302,12 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scratches" />
       <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../Test_Platform_Django" />
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="SearchEverywhereHistoryKey" value="csrf&#9;null&#9;null&#10;Installed_a&#9;null&#9;null" />
     <property name="WebServerToolWindowFactoryState" value="false" />
@@ -309,7 +339,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.调用">
+  <component name="RunManager">
     <configuration name="调用" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -343,6 +373,25 @@
       <module name="guest" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/TEST.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <configuration name="测试" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Users\rick_zhang\AppData\Local\Programs\Python\Python36\python3.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/.." />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="Test_Platform_Django" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../测试.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -400,25 +449,6 @@
       <module name="guest" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/sign/t.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-    </configuration>
-    <configuration name="test" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/sign" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="guest" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="D:\python脚本\Test_Platform_Django\sign\test.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -508,21 +538,19 @@
       <option name="_new_target" value="&quot;.&quot;" />
       <option name="_new_targetType" value="&quot;PATH&quot;" />
     </configuration>
-    <list size="6">
+    <list size="5">
       <item index="0" class="java.lang.String" itemvalue="Django server.Test_Platform_Django" />
-      <item index="1" class="java.lang.String" itemvalue="Python.test" />
-      <item index="2" class="java.lang.String" itemvalue="Python.t" />
-      <item index="3" class="java.lang.String" itemvalue="Python.TEST" />
-      <item index="4" class="java.lang.String" itemvalue="Python.models" />
-      <item index="5" class="java.lang.String" itemvalue="Python.调用" />
+      <item index="1" class="java.lang.String" itemvalue="Python.t" />
+      <item index="2" class="java.lang.String" itemvalue="Python.TEST" />
+      <item index="3" class="java.lang.String" itemvalue="Python.models" />
+      <item index="4" class="java.lang.String" itemvalue="Python.调用" />
     </list>
     <recent_temporary>
-      <list size="5">
+      <list size="4">
         <item index="0" class="java.lang.String" itemvalue="Python.调用" />
         <item index="1" class="java.lang.String" itemvalue="Python.models" />
         <item index="2" class="java.lang.String" itemvalue="Python.TEST" />
         <item index="3" class="java.lang.String" itemvalue="Python.t" />
-        <item index="4" class="java.lang.String" itemvalue="Python.test" />
       </list>
     </recent_temporary>
   </component>
@@ -820,7 +848,14 @@
       <option name="project" value="LOCAL" />
       <updated>1530242521650</updated>
     </task>
-    <option name="localTasksCounter" value="41" />
+    <task id="LOCAL-00041" summary="New">
+      <created>1530600273725</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1530600273726</updated>
+    </task>
+    <option name="localTasksCounter" value="42" />
     <servers />
   </component>
   <component name="TodoView">
@@ -838,11 +873,11 @@
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3284553" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1859931" sideWeight="0.5060514" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25028703" sideWeight="0.49707174" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26980484" sideWeight="0.49707174" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.6509759" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.326062" sideWeight="0.4969651" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.35246843" sideWeight="0.49394855" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.11961207" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23191734" sideWeight="0.49394855" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13900863" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="SciView" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -923,7 +958,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/sign/migrations/0001_initial.py" />
     <entry file="file://$PROJECT_DIR$/sign/migrations/0002_auto_20170505_1348.py" />
     <entry file="file://C:/Python27/Scripts/django-admin.py" />
     <entry file="file://$PROJECT_DIR$/sign/templates/img.jpg" />
@@ -983,13 +1017,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/sign/t.py" />
     <entry file="file://$PROJECT_DIR$/sign/test.py" />
-    <entry file="file://$PROJECT_DIR$/sign/templates/upload_case.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="650">
-          <caret line="30" column="14" lean-forward="false" selection-start-line="30" selection-start-column="14" selection-end-line="30" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/.PyCharmCE2017.1/system/python_stubs/-1631578159/_datetime.py" />
     <entry file="file://$PROJECT_DIR$/TEST.py" />
     <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/site-packages/django/contrib/messages/api.py" />
@@ -1014,9 +1041,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="374">
           <caret line="27" column="37" lean-forward="false" selection-start-line="27" selection-start-column="37" selection-end-line="27" selection-end-column="37" />
-          <folding>
-            <element signature="e#639#680#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1027,17 +1051,27 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sign/models.py">
+    <entry file="file://$PROJECT_DIR$/sign/templates/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="302">
-          <caret line="24" column="0" lean-forward="false" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
+        <state relative-caret-position="1190">
+          <caret line="70" column="14" lean-forward="false" selection-start-line="70" selection-start-column="14" selection-end-line="70" selection-end-column="14" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sign/templates/index.html">
+    <entry file="file://$PROJECT_DIR$/sign/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="302">
-          <caret line="70" column="14" lean-forward="false" selection-start-line="70" selection-start-column="14" selection-end-line="70" selection-end-column="14" />
+        <state relative-caret-position="153">
+          <caret line="12" column="21" lean-forward="false" selection-start-line="12" selection-start-column="21" selection-end-line="12" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/guest/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="748">
+          <caret line="44" column="0" lean-forward="false" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1049,20 +1083,28 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../调用.py">
+    <entry file="file://$PROJECT_DIR$/sign/templates/upload_case.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="12" column="70" lean-forward="false" selection-start-line="12" selection-start-column="70" selection-end-line="12" selection-end-column="70" />
+        <state relative-caret-position="527">
+          <caret line="31" column="5" lean-forward="false" selection-start-line="31" selection-start-column="5" selection-end-line="31" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../测试.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="7" column="24" lean-forward="false" selection-start-line="7" selection-start-column="24" selection-end-line="7" selection-end-column="24" />
           <folding>
             <element signature="e#0#25#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sign/templates/test_tools.html">
+    <entry file="file://$PROJECT_DIR$/../调用.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="14" lean-forward="false" selection-start-line="10" selection-start-column="14" selection-end-line="10" selection-end-column="14" />
+        <state relative-caret-position="187">
+          <caret line="12" column="70" lean-forward="false" selection-start-line="12" selection-start-column="70" selection-end-line="12" selection-end-column="70" />
           <folding />
         </state>
       </provider>
@@ -1075,36 +1117,36 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/guest/settings.py">
+    <entry file="file://$PROJECT_DIR$/sign/templates/test_tools.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1547">
-          <caret line="91" column="28" lean-forward="false" selection-start-line="91" selection-start-column="28" selection-end-line="91" selection-end-column="28" />
+        <state relative-caret-position="493">
+          <caret line="81" column="20" lean-forward="true" selection-start-line="81" selection-start-column="20" selection-end-line="81" selection-end-column="20" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/sign/test_tools.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="337">
-          <caret line="59" column="85" lean-forward="false" selection-start-line="59" selection-start-column="85" selection-end-line="59" selection-end-column="85" />
+        <state relative-caret-position="340">
+          <caret line="61" column="37" lean-forward="true" selection-start-line="61" selection-start-column="37" selection-end-line="61" selection-end-column="37" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
-            <marker date="1530600265527" expanded="true" signature="10658:10774" ph="select b.gui... purchase_order" />
-            <marker date="1530600265527" expanded="true" signature="11396:11620" ph="select a.pro... purchase_order_line" />
-            <marker date="1530600265527" expanded="true" signature="11514:11582" ph="select id fr... purchase_order" />
-            <marker date="1530600265527" expanded="true" signature="11795:11864" ph="select name product_uom" />
-            <marker date="1530600265527" expanded="true" signature="13006:13206" ph="select a.pro... sale_order_line" />
-            <marker date="1530600265527" expanded="true" signature="13471:13543" ph="select defau... product_product" />
-            <marker date="1530600265527" expanded="true" signature="17319:17445" ph="select a.sku... order_detail" />
-            <marker date="1530600265527" expanded="true" signature="17505:17680" ph="select c.sku... cs_apply_detail" />
-            <marker date="1530600265527" expanded="true" signature="17579:17679" ph="select b.cs_... cs_apply" />
-            <marker date="1530600265527" expanded="true" signature="18023:18136" ph="select a.sku... order_detail" />
-            <marker date="1530600265527" expanded="true" signature="18196:18391" ph="select b.sku... cs_apply_detail" />
-            <marker date="1530600265527" expanded="true" signature="18270:18373" ph="select a.CS_... cs_apply" />
-            <marker date="1530600265527" expanded="true" signature="18451:18652" ph="select b.sku... cs_apply_detail" />
-            <marker date="1530600265527" expanded="true" signature="18525:18634" ph="select a.CS_... cs_apply" />
-            <marker date="1530600265527" expanded="true" signature="21576:21678" ph="select a.CS_... cs_apply" />
-            <marker date="1530600265527" expanded="true" signature="22775:22852" ph="select a.ord... order_info" />
+            <marker date="1533110052945" expanded="true" signature="10658:10774" ph="select b.gui... purchase_order" />
+            <marker date="1533110052945" expanded="true" signature="11396:11620" ph="select a.pro... purchase_order_line" />
+            <marker date="1533110052945" expanded="true" signature="11514:11582" ph="select id fr... purchase_order" />
+            <marker date="1533110052945" expanded="true" signature="11795:11864" ph="select name product_uom" />
+            <marker date="1533110052945" expanded="true" signature="13006:13206" ph="select a.pro... sale_order_line" />
+            <marker date="1533110052945" expanded="true" signature="13471:13543" ph="select defau... product_product" />
+            <marker date="1533110052945" expanded="true" signature="17319:17445" ph="select a.sku... order_detail" />
+            <marker date="1533110052945" expanded="true" signature="17505:17680" ph="select c.sku... cs_apply_detail" />
+            <marker date="1533110052945" expanded="true" signature="17579:17679" ph="select b.cs_... cs_apply" />
+            <marker date="1533110052945" expanded="true" signature="18023:18136" ph="select a.sku... order_detail" />
+            <marker date="1533110052945" expanded="true" signature="18196:18391" ph="select b.sku... cs_apply_detail" />
+            <marker date="1533110052945" expanded="true" signature="18270:18373" ph="select a.CS_... cs_apply" />
+            <marker date="1533110052945" expanded="true" signature="18451:18652" ph="select b.sku... cs_apply_detail" />
+            <marker date="1533110052945" expanded="true" signature="18525:18634" ph="select a.CS_... cs_apply" />
+            <marker date="1533110052945" expanded="true" signature="21576:21678" ph="select a.CS_... cs_apply" />
+            <marker date="1533110052945" expanded="true" signature="22775:22852" ph="select a.ord... order_info" />
           </folding>
         </state>
       </provider>
